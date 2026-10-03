@@ -1,5 +1,7 @@
 # Agent Instructions
 
+This repo is a **Swift / SwiftUI iOS** app (**wifyradar**), developed primarily in **Cursor**, built and signed with **Xcode**.
+
 The first time I ask for a new feature in a session, familiarize yourself with the conventions of this codebase. Review `README.md` and `openspec/specs/`. Tell me when you have done the review before proposing anything.
 
 ## Documentation tone
@@ -10,7 +12,7 @@ Project docs (`README.md`, OpenSpec, comments meant for readers) MUST be written
 
 Training data may predate current Apple tooling. Prefer the installed toolchain over older assumptions. Document only versions and components actually present on the machine — do not treat unreleased or next-major Xcode marketing as the project baseline.
 
-This project is developed in **Cursor**; use Xcode for the iOS toolchain (build, Simulator, device install, signing), not as the primary editor.
+Use Xcode for the iOS toolchain (build, Simulator, device install, signing), not as the primary editor.
 
 ### Toolchain (installed)
 
@@ -45,20 +47,20 @@ Scenario tags:
 | Tag | When to use |
 |-----|-------------|
 | `[tested]` | An automated test **directly asserts the scenario's WHEN/THEN** — not merely related code in the same file or feature area. |
-| `[manual]` | True end-to-end behavior that cannot run in CI (e.g. live external services with real credentials). |
+| `[manual]` | True end-to-end behavior that cannot run in CI (e.g. install on a personal iPhone, live CloudKit with real Apple IDs). |
 | *(untagged)* | Planned or partially implemented; not yet verified. |
 
 **`[tested]` requirements:**
 
-1. **Name the scenario in the test** — use a comment (`// Scenario: …`) or a `describe`/`it` title that matches the spec scenario heading so reviewers can trace spec ↔ test.
-2. **Exercise the WHEN** — call the function, module, or path the scenario describes.
-3. **Assert the THEN** — check outputs, thrown errors, side effects, or call order exactly as the spec states.
+1. **Name the scenario in the test** — use a comment (`// Scenario: …`) or a `@Test` function name / display name that matches the spec scenario heading so reviewers can trace spec ↔ test.
+2. **Exercise the WHEN** — call the function, type, or code path the scenario describes.
+3. **Assert the THEN** — check outputs, thrown errors, side effects, or call order exactly as the spec states (`#expect` / `try #require` in Swift Testing).
 4. **One scenario, one primary test** — a single test may cover multiple assertions for the same scenario; do not mark a scenario `[tested]` because a nearby scenario in the same module is tested.
 
 **Do not mark `[tested]` when:**
 
 - Coverage is only indirect (e.g. "happy path runs" but the scenario is about a specific edge case).
-- The test only reads static markdown **without a parser or structured assertion** (a bare `toContain` on one phrase is not enough).
+- The test only reads static markdown **without a parser or structured assertion** (a bare string contains check is not enough).
 - The spec and implementation diverge (fix the spec or the code first, then tag).
 
 When adding `[tested]`, add or update the test in the same change. When removing behavior, remove the tag or delete the scenario.
@@ -66,7 +68,7 @@ When adding `[tested]`, add or update the test in the same change. When removing
 Each change **`design.md` MUST include a `## Documentation` section** with:
 
 1. **`README.md`** — bullet list of what to add or update for this feature (sections, examples, behavioral specs table). Do not duplicate full README prose in the design; list the targets.
-2. **Spec scenario tags** — links to both spec copies for this change, plus a **scenario → test mapping** table (scenario name, `it('…')` title to fill at ship time, test file link).
+2. **Spec scenario tags** — links to both spec copies for this change, plus a **scenario → test mapping** table (scenario name, `@Test` name to fill at ship time, test file link).
 
 When implementation and tests land, follow the tag rules below **and** complete the Documentation checklist in that change's `design.md` (README updates, tag both spec copies, fill in the mapping table).
 
@@ -77,7 +79,7 @@ When implementation and tests land, follow the tag rules below **and** complete 
 | `openspec/specs/<name>/spec.md` | Canonical — add tags and test links here first |
 | `openspec/changes/<name>/specs/<name>/spec.md` | Change spec — only the new/modified requirements and scenarios from this change |
 
-For each `[tested]` scenario, add a **Test** line with the exact `it(...)` title (or `describe` title when the whole block maps to one scenario) and a markdown link to the test file:
+For each `[tested]` scenario, add a **Test** line with the exact `@Test` name (or suite name when the whole suite maps to one scenario) and a markdown link to the test file:
 
 ```markdown
 #### Scenario: Example behavior [tested]
@@ -85,10 +87,10 @@ For each `[tested]` scenario, add a **Test** line with the exact `it(...)` title
 - GIVEN …
 - WHEN …
 - THEN …
-- **Test:** `does the thing described in the scenario` — [`src/path/module.test.ts`](../../../src/path/module.test.ts)
+- **Test:** `exampleBehavior()` — [`WifyRadarTests/ExampleTests.swift`](../../../WifyRadarTests/ExampleTests.swift)
 ```
 
-Use paths relative to the spec file so links resolve from `openspec/specs/<name>/` (typically `../../../src/…`) or `openspec/changes/<name>/specs/<name>/` (typically `../../../../src/…`).
+Use paths relative to the spec file so links resolve from `openspec/specs/<name>/` (typically `../../../WifyRadarTests/…`) or `openspec/changes/<name>/specs/<name>/` (typically `../../../../WifyRadarTests/…`).
 
 Do not mark a scenario `[tested]` until the linked test exists and asserts the THEN. Use `[manual]` only when CI coverage is genuinely impossible — not as a shortcut for skipped tests.
 
@@ -96,14 +98,18 @@ Commit the specs before writing any implementation code.
 
 ## Tests
 
-Run the full test suite before committing any change:
+Prefer **Swift Testing** (`@Test`, `#expect`, `try #require`) for new unit tests. Use XCTest only when required (e.g. UI automation with `XCUIApplication`).
+
+When a test target exists, run the full suite before committing any change:
 
 ```bash
-npm test
+xcodebuild test -scheme WifyRadar -destination 'platform=iOS Simulator,name=iPhone 17'
 ```
 
-All tests must pass. Do not commit if tests fail. Fix the failing tests first.
+Adjust the scheme or destination if the project’s simulators differ. All tests must pass. Do not commit if tests fail. Fix the failing tests first.
 
-**Rule of thumb:** if the change affects what the user sees — new output, different format, new behavior — add or update tests. Mock external services when testing those flows; don't skip tests just because the code path involves an external call.
+Until a test target exists, rely on OpenSpec `[manual]` scenarios and `docs/` for verification (Simulator launch, personal device install).
 
-**Mock fidelity:** When wrapping an external API, capture the real response format before writing parsers or tests. Run the tool once (via a script or manual call), log the raw response, and base your parser and test mocks on that actual output — not on assumptions about the format. Speculative mocks that match the parser rather than reality will pass tests but hide bugs.
+**Rule of thumb:** if the change affects app behavior or logic users rely on — new output, different format, new rules — add or update automated tests when that logic can run under `xcodebuild test`. Mock external services when testing those flows; don't skip tests just because the code path involves an external call.
+
+**Mock fidelity:** When wrapping an external API, capture the real response format before writing parsers or tests. Run the integration once (script or manual call), log the raw response, and base parsers and test mocks on that actual output — not on assumptions about the format. Speculative mocks that match the parser rather than reality will pass tests but hide bugs.
