@@ -71,6 +71,21 @@ xcrun simctl list devices available
 
 You should see a Swift version, Xcode 26.x, and at least one available iPhone simulator. If `xcodebuild` or `simctl` report that only Command Line Tools are selected, re-run the `xcode-select` step above.
 
+## Run
+
+1. Open `WifyRadar.xcodeproj` in Xcode.
+2. Next to **▶**, click the phone name after **WifyRadar ›** and choose a Simulator or your plugged-in iPhone.
+3. For a real iPhone: left sidebar → blue **WifyRadar** project → **TARGETS → WifyRadar** → **Signing & Capabilities** → check **Automatically manage signing** → set **Team**.
+4. Press **▶**.
+
+More detail: [`docs/first-build.md`](docs/first-build.md).
+
+### Behavioral specs
+
+| Spec | Description |
+|------|-------------|
+| [Branded scaffold](openspec/specs/branded-scaffold/spec.md) | Minimal branded app; Simulator build and personal iPhone install |
+
 ## Agent skills
 
 These [agent skills](https://skills.sh/) help Cursor (and similar agents) write better Swift/SwiftUI code for this project. Install them into the repo (project-local under `.agents/skills/`):
