@@ -1,10 +1,12 @@
+import SwiftData
 import SwiftUI
 
 @main
 struct WifyRadarApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ListsHomeView()
         }
+        .modelContainer(for: [SharedList.self, ListItem.self])
     }
 }

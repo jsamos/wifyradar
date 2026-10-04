@@ -78,13 +78,15 @@ You should see a Swift version, Xcode 26.x, and at least one available iPhone si
 3. For a real iPhone: left sidebar → blue **WifyRadar** project → **TARGETS → WifyRadar** → **Signing & Capabilities** → check **Automatically manage signing** → set **Team**.
 4. Press **▶**.
 
-More detail: [`docs/first-build.md`](docs/first-build.md).
+More detail: [`docs/build.md`](docs/build.md) (first install and rebuild).
 
 ### Behavioral specs
 
 | Spec | Description |
 |------|-------------|
 | [Branded scaffold](openspec/specs/branded-scaffold/spec.md) | Minimal branded app; Simulator build and personal iPhone install |
+| [Lists home](openspec/specs/lists-home/spec.md) | Launch to lists, create/open lists, add items |
+| [Share list](openspec/specs/share-list/spec.md) | Invite another person to a list and keep items in sync |
 
 ## Agent skills
 
