@@ -34,20 +34,39 @@ That second name (`iPhone 17 Pro` in this example) is a button. **Click that sec
 1. Plug the iPhone into the Mac with a cable.
 2. Unlock the iPhone.
 3. On the iPhone, if a popup says **Trust This Computer?**, tap **Trust**, then enter the passcode.
-4. Wait ~30 seconds.
 
-#### B. Turn on Developer Mode (on the iPhone)
+#### B. Pair the phone with Xcode
 
-Do this **on each iPhone** you will install to. It is an iPhone setting, not a Mac setting.
+Pairing must finish before **Developer Mode** is available on the iPhone.
+
+1. In Xcode: **Window → Devices and Simulators**.
+2. Open the **Devices** tab and select the iPhone in the left list.
+3. Wait until pairing finishes (device details shown; no pairing spinner).
+
+If pairing stays stuck and the iPhone shows no prompt:
+
+1. Unplug the iPhone.
+2. On the iPhone: **Settings → General → Transfer or Reset iPhone → Reset → Reset Location & Privacy**, then enter the passcode and confirm.
+3. Quit Xcode.
+4. Plug the iPhone back in, unlock it, tap **Trust** and enter the passcode when asked.
+5. Reopen Xcode → **Window → Devices and Simulators** and wait until pairing finishes.
+
+#### C. Turn on Developer Mode (on the iPhone)
+
+Do this **on each iPhone** you will install to.
 
 1. On the iPhone: **Settings → Privacy & Security → Developer Mode**.
 2. Turn **Developer Mode** on.
 3. Restart the iPhone if prompted, then confirm you want Developer Mode enabled.
 4. Unlock the phone again after restart.
 
-If **Developer Mode** is missing from Privacy & Security, plug the phone into the Mac, select it in Xcode once (section C), then check Settings again — the toggle often appears after the first connection to Xcode.
+#### D. Wait for shared cache copy
 
-#### C. Choose your real phone in Xcode
+1. In Xcode: **Window → Devices and Simulators**.
+2. Select the iPhone in the left list.
+3. Wait until **Copying shared cache symbols** (or similar) finishes. Leave the phone connected and unlocked until it completes.
+
+#### E. Choose your real phone in Xcode
 
 1. At the top of Xcode, click the second name after `WifyRadar  >`.
 2. In the dropdown, find and click **your iPhone’s name** (the name from the phone’s Settings → General → About).
@@ -55,7 +74,7 @@ If **Developer Mode** is missing from Privacy & Security, plug the phone into th
 
 If your phone is missing from the list: unplug/replug, unlock the phone, confirm Trust, quit and reopen Xcode.
 
-#### D. Signing (one-time setup for real phones)
+#### F. Signing (one-time setup for real phones)
 
 1. In Xcode’s **left** sidebar, click the blue folder/project icon labeled **WifyRadar** at the top of the file list.
 2. In the center area, under **TARGETS**, click **WifyRadar**.
@@ -63,7 +82,7 @@ If your phone is missing from the list: unplug/replug, unlock the phone, confirm
 4. Turn on the checkbox **Automatically manage signing**.
 5. Open the **Team** menu and pick your Apple ID (Personal Team is fine).
 
-#### E. Install on the phone
+#### G. Install on the phone
 
 1. Click **▶**.
 2. Wait for Xcode to finish. The first time can take a few minutes.
@@ -78,16 +97,18 @@ If your phone is missing from the list: unplug/replug, unlock the phone, confirm
 
 1. Unplug the first phone (optional).
 2. Plug in the second phone, unlock it, tap **Trust** if asked.
-3. On the second iPhone, turn on **Developer Mode** (section B) — each phone needs its own setting.
-4. Click the second name after `WifyRadar  >` and click the second phone’s name.
-5. Click **▶**.
-6. On the second iPhone, trust the Developer App certificate the same way as section E step 3.
-7. Click **▶** again if needed.
+3. Pair the second phone (section B).
+4. On the second iPhone, turn on **Developer Mode** (section C).
+5. Wait for shared cache copy (section D).
+6. Click the second name after `WifyRadar  >` and click the second phone’s name.
+7. Click **▶**.
+8. On the second iPhone, trust the Developer App certificate the same way as section G step 3.
+9. Click **▶** again if needed.
 
 ### Notes
 
 - Free Apple ID works. Installs may stop working after ~7 days until you click **▶** again from Xcode.
-- Simulator success does not set up real-phone signing. Signing happens in section D + first real-phone **▶**.
+- Simulator success does not set up real-phone signing. Signing happens in section F + first real-phone **▶**.
 - No App Store needed for this.
 
 ## Rebuild
