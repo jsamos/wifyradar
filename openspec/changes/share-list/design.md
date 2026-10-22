@@ -35,7 +35,7 @@ None in-app. Both devices must be signed into iCloud.
 
 - Note iCloud requirement for sharing
 - Link the share-list behavioral spec
-- Optional short `docs/` checklist for the two-phone share demo
+- Link [`docs/icloud-sharing-plan.md`](../../../docs/icloud-sharing-plan.md) (ADP requirement + verification checkpoints)
 
 ### Spec scenario tags
 

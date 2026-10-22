@@ -80,6 +80,8 @@ You should see a Swift version, Xcode 26.x, and at least one available iPhone si
 
 More detail: [`docs/build.md`](docs/build.md) (first install and rebuild).
 
+Two-phone iCloud sharing needs a paid Apple Developer Program membership (free Personal Team cannot use iCloud). Verification checkpoints: [`docs/icloud-sharing-plan.md`](docs/icloud-sharing-plan.md).
+
 ### Behavioral specs
 
 | Spec | Description |
