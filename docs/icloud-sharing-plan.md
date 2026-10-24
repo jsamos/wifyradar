@@ -20,23 +20,35 @@ Use **Organization** only if you need a company as the App Store seller (D‑U�
 - Agree to the license and **pay**
 - Wait for confirmation (usually within ~**24 hours**). If not, contact Apple with your Enrollment ID ([enrollment help](https://developer.apple.com/support/enrollment/))
 
-**Done when:** the paid team appears in Xcode → **Settings → Accounts** (not only Personal Team).
+**Done when:** you have a paid ADP team, not only a free Personal Team.
+
+How to tell:
+
+- Xcode → **Settings → Accounts** → open your account → open the **Teams** row. Free tier says **Personal Team**. Paid Individual shows **Developer Team** (or similar) with a role such as Admin / Account Holder — not “Personal Team”.
+- On the web: [developer.apple.com/account](https://developer.apple.com/account) → membership shows an active **Apple Developer Program** enrollment.
+- What matters for builds is the project **Team** dropdown in Signing & Capabilities (next stage). Accounts can show the paid team while the target is still on Personal Team.
 
 ### 2. Prove iCloud signing on one phone
 
-Enrollment is not enough until a device build accepts CloudKit entitlements.
+Enrollment is not enough until a device build accepts CloudKit entitlements. A normal lists-home run without iCloud does **not** prove this stage.
 
-1. Xcode → **Settings → Accounts** → refresh; select the ADP team.
-2. `WifyRadar.xcodeproj` → **TARGETS → WifyRadar → Signing & Capabilities**.
-3. **Team** = paid team; **Automatically manage signing** on.
-4. Add **iCloud** → enable **CloudKit** → container `iCloud.com.wifyradar.app`.
-5. Build and run on one iPhone (**▶**).
+1. Open `WifyRadar.xcodeproj` → left sidebar blue **WifyRadar** → **TARGETS → WifyRadar** → **Signing & Capabilities**.
+2. Keep **Automatically manage signing** on.
+3. Set **Team** to your paid team: your name **without** the suffix **(Personal Team)**. If the dropdown only lists Personal Team, use **Settings → Accounts → Add Account** / sign in again so the paid team appears, then re-open the Team menu.
+4. Click **+ Capability** → add **iCloud**.
+5. Check **CloudKit** (Key-value storage and iCloud Documents can stay off).
+6. Under **iCloud Identifiers**, click **+** and add/select container **`iCloud.com.wifyradar.app`** (the list often starts empty even after CloudKit is checked). Ensure that container is selected.
+7. Choose a physical iPhone → **▶**.
 
-**Done when:** install succeeds with no iCloud / provisioning-profile errors.
+**Done when:** the app installs and launches with no iCloud / Personal Team / provisioning-profile errors.
 
 ### 3. Restore share code and open Share on one phone
 
-The repo may still be local SwiftData lists-home until this stage. Re-apply the share-list stack (Core Data + private/shared CloudKit stores, Share control, accept path, entitlements, `CKSharingSupported`) — see [`openspec/changes/share-list/design.md`](../openspec/changes/share-list/design.md).
+Replace SwiftData lists-home persistence with the share-list stack — see [`openspec/changes/share-list/design.md`](../openspec/changes/share-list/design.md):
+
+- Core Data model + `NSPersistentCloudKitContainer` (private + shared stores)
+- Share control on owned lists + accept-share path
+- `CKSharingSupported` and **remote-notification** background mode (`Config/Info.plist`)
 
 1. Install on phone A; create a list; add an item.
 2. Open that list → **Share**; confirm the system share sheet opens without entitlement errors.
@@ -49,9 +61,11 @@ The repo may still be local SwiftData lists-home until this stage. Re-apply the 
 - **Different** iCloud accounts on each phone
 - Both online
 
-1. Phone A: owned list → **Share** → send invite to phone B.
-2. Phone B: accept; list appears on Lists home.
+1. Either phone (as owner of a list): **Share** → enter the other person’s **Apple ID email** → **Send Invite** → send the invite link (Messages, etc.). Invite-only (`publicPermission = .none`). Do not use the system **Collaboration** row (it can open empty).
+2. Other phone: open the invite while signed into **the invited Apple ID** (app installed); accept. After import (may take a few seconds), the app should open that list’s detail screen (and the list remains on Lists home). Opening the link on the **owner’s** Apple ID will not add a second copy of the list.
 3. Add an item on either phone; it appears on the other after sync (no new invite).
+
+Both phones can own lists and invite. Each Apple ID needs free iCloud storage or CloudKit returns Quota Exceeded.
 
 **Done when:** the `[manual]` scenarios in [`openspec/specs/share-list/spec.md`](../openspec/specs/share-list/spec.md) pass.
 

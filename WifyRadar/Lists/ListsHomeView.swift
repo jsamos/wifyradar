@@ -1,14 +1,22 @@
-import SwiftData
+import CoreData
 import SwiftUI
 
 struct ListsHomeView: View {
-    @Environment(\.modelContext) private var modelContext
-    @Query(sort: \SharedList.createdAt, order: .reverse) private var lists: [SharedList]
+    @Environment(\.managedObjectContext) private var context
+    private let persistence = PersistenceController.shared
+    private let shareNavigation = ShareNavigationStore.shared
+    @FetchRequest(
+        sortDescriptors: [NSSortDescriptor(keyPath: \SharedList.createdAt, ascending: false)],
+        animation: .default
+    )
+    private var lists: FetchedResults<SharedList>
+
+    @State private var path = NavigationPath()
     @State private var isCreatingList = false
     @State private var newListName = ""
 
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: $path) {
             Group {
                 if lists.isEmpty {
                     ContentUnavailableView {
@@ -23,9 +31,9 @@ struct ListsHomeView: View {
                     }
                 } else {
                     List {
-                        ForEach(lists) { list in
-                            NavigationLink(value: list) {
-                                Text(list.name)
+                        ForEach(lists, id: \.objectID) { list in
+                            NavigationLink(value: list.objectID) {
+                                Text(list.name ?? "Untitled")
                             }
                         }
                         .onDelete(perform: deleteLists)
@@ -42,8 +50,10 @@ struct ListsHomeView: View {
                     }
                 }
             }
-            .navigationDestination(for: SharedList.self) { list in
-                ListDetailView(list: list)
+            .navigationDestination(for: NSManagedObjectID.self) { objectID in
+                if let list = try? context.existingObject(with: objectID) as? SharedList {
+                    ListDetailView(list: list)
+                }
             }
             .sheet(isPresented: $isCreatingList) {
                 NavigationStack {
@@ -70,27 +80,47 @@ struct ListsHomeView: View {
                 }
                 .presentationDetents([.medium])
             }
+            .onChange(of: shareNavigation.pendingListURI) { _, uri in
+                openPendingSharedList(uri)
+            }
+            .onAppear {
+                openPendingSharedList(shareNavigation.pendingListURI)
+            }
         }
+        .overlay {
+            if shareNavigation.isOpeningSharedList {
+                ShareInviteLoadingView()
+                    .transition(.opacity)
+                    .zIndex(1)
+            }
+        }
+        .animation(.easeInOut(duration: 0.2), value: shareNavigation.isOpeningSharedList)
+    }
+
+    private func openPendingSharedList(_ uri: URL?) {
+        guard let uri,
+              let objectID = context.persistentStoreCoordinator?
+                .managedObjectID(forURIRepresentation: uri)
+        else { return }
+        path.append(objectID)
+        shareNavigation.clearPending()
     }
 
     private func createList() {
         let name = newListName.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !name.isEmpty else { return }
-        modelContext.insert(SharedList(name: name))
-        try? modelContext.save()
+        let list = SharedList(context: context)
+        list.name = name
+        list.createdAt = Date()
+        persistence.save()
         newListName = ""
         isCreatingList = false
     }
 
     private func deleteLists(at offsets: IndexSet) {
         for index in offsets {
-            modelContext.delete(lists[index])
+            context.delete(lists[index])
         }
-        try? modelContext.save()
+        persistence.save()
     }
-}
-
-#Preview {
-    ListsHomeView()
-        .modelContainer(for: [SharedList.self, ListItem.self], inMemory: true)
 }

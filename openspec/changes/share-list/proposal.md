@@ -6,7 +6,7 @@ Prove two iPhones can share one list over iCloud: owner invites, participant acc
 
 ## Scope
 
-Depends on **lists-home** (lists UI + models already exist).
+Depends on **lists-home** UI flows. Persistence moves to **Core Data + NSPersistentCloudKitContainer** because SwiftData cannot do multi-user CloudKit shares.
 
 - Share a list the user owns via the system share UI (e.g. Messages) using the device iCloud account
 - Keep shared list data in sync between participants’ devices
@@ -16,9 +16,10 @@ Depends on **lists-home** (lists UI + models already exist).
 
 ## Out of scope
 
-- Building Lists home / create / detail UI (see **lists-home**)
+- Keeping SwiftData as the persistence layer
+- Building Lists home / create / detail UI from scratch (see **lists-home**)
 - In-app login
 - Custom servers
-- Push notifications for every edit
+- Push notifications for every edit (CloudKit remote-notification background mode is still required for sync)
 - Unshare / leave UX beyond system defaults
 - Grocery-specific features

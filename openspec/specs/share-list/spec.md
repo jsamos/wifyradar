@@ -16,13 +16,19 @@ The app SHALL let the list owner invite another person to a list using the syste
 
 ### Requirement: Accept and see a shared list
 
-A participant who accepts the share on a second iPhone SHALL see the shared list in the Lists home.
+A participant who accepts the share on a second iPhone SHALL see the shared list in the Lists home. When the participant opens the invite, the app SHALL navigate to that list’s detail screen once the list is available.
 
 #### Scenario: Participant sees accepted list [manual]
 
 - GIVEN a share invite for a list was sent from phone A
 - WHEN the participant accepts the invite on phone B
 - THEN the shared list appears in the Lists home on phone B
+
+#### Scenario: Accepting an invite opens that list [manual]
+
+- GIVEN a share invite for a list was sent to the participant
+- WHEN the participant opens and accepts the invite
+- THEN the app navigates to that list’s detail screen after the list is available (not only Lists home)
 
 ### Requirement: Ongoing item sync
 
