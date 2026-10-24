@@ -47,7 +47,7 @@ No in-app account. Contacts permission is separate from iCloud. CloudKit invite 
 | Manual | Grant Contacts → pick email → invite sends |
 | Manual | Deny Contacts → typed email still works |
 | Manual | Contact with multiple emails → chosen email used |
-| Automated | Optional unit tests for email extraction / authorization branching if isolated without UI |
+| Automated | `ContactEmailSelectionTests`, `ContactInviteAccessTests` (mocked authorization provider) |
 
 ## Documentation
 
@@ -63,10 +63,10 @@ No in-app account. Contacts permission is separate from iCloud. CloudKit invite 
 
 | Scenario | Test title (at ship) | Test file |
 |----------|----------------------|-----------|
-| First use requests Contacts access | *(manual or unit)* | — |
-| Denied access keeps manual email entry | *(manual or unit)* | — |
-| Owner picks a contact email | *(manual)* | — |
-| Contact with multiple emails | *(manual)* | — |
+| First use requests Contacts access | `notDeterminedRequestsThenProceeds()` (branch unit) + `[manual]` prompt | [`WifyRadarTests/ContactInviteAccessTests.swift`](../../../../WifyRadarTests/ContactInviteAccessTests.swift) |
+| Denied access keeps manual email entry | `deniedKeepsTypedEmail()` (branch unit) + `[manual]` typed send | [`WifyRadarTests/ContactInviteAccessTests.swift`](../../../../WifyRadarTests/ContactInviteAccessTests.swift) |
+| Owner picks a contact email | `oneEmailFillsField()` (selection unit) + `[manual]` end-to-end | [`WifyRadarTests/ContactEmailSelectionTests.swift`](../../../../WifyRadarTests/ContactEmailSelectionTests.swift) |
+| Contact with multiple emails | `manyEmailsPresentChoices()` (selection unit) + `[manual]` sheet | [`WifyRadarTests/ContactEmailSelectionTests.swift`](../../../../WifyRadarTests/ContactEmailSelectionTests.swift) |
 | Owner types email without Contacts | *(manual)* | — |
 | Only selected email leaves the device for invite | *(manual)* | — |
 | iCloud.com email resolves and invite succeeds | *(manual)* | — |

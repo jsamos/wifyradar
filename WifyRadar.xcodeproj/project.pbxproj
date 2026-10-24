@@ -6,11 +6,27 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXContainerItemProxy section */
+		2285032F3F5A46F195E1DD7C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 86B1648072B14E578307E3D6 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FA72C8A33C894679A1B3236A;
+			remoteInfo = WifyRadar;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		454B36D0BAA54A6EA21DB72D /* WifyRadar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WifyRadar.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		75858A8B94154B7184C85494 /* WifyRadarTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WifyRadarTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		01C304CC6EBD40DE94EDEFD5 /* WifyRadarTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = WifyRadarTests;
+			sourceTree = "<group>";
+		};
 		17879F5A32FE447CA6E419A8 /* WifyRadar */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = WifyRadar;
@@ -26,6 +42,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		828209B9E7FC42AC8855C9E8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -33,6 +56,7 @@
 			isa = PBXGroup;
 			children = (
 				17879F5A32FE447CA6E419A8 /* WifyRadar */,
+				01C304CC6EBD40DE94EDEFD5 /* WifyRadarTests */,
 				A2EE3356328B4DACB87C1EDE /* Products */,
 			);
 			sourceTree = "<group>";
@@ -41,6 +65,7 @@
 			isa = PBXGroup;
 			children = (
 				454B36D0BAA54A6EA21DB72D /* WifyRadar.app */,
+				75858A8B94154B7184C85494 /* WifyRadarTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -48,6 +73,28 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		0E4936CFB6554E14AC8323BD /* WifyRadarTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3D48451534714AE28435647C /* Build configuration list for PBXNativeTarget "WifyRadarTests" */;
+			buildPhases = (
+				1B7AA6CAC0BD4C79AEE90C63 /* Sources */,
+				828209B9E7FC42AC8855C9E8 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				23C80D33C0C147E18A5101BE /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				01C304CC6EBD40DE94EDEFD5 /* WifyRadarTests */,
+			);
+			name = WifyRadarTests;
+			packageProductDependencies = (
+			);
+			productName = WifyRadarTests;
+			productReference = 75858A8B94154B7184C85494 /* WifyRadarTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		FA72C8A33C894679A1B3236A /* WifyRadar */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = E70C6E356B704AD888596E39 /* Build configuration list for PBXNativeTarget "WifyRadar" */;
@@ -80,6 +127,10 @@
 				LastSwiftUpdateCheck = 2600;
 				LastUpgradeCheck = 2660;
 				TargetAttributes = {
+					0E4936CFB6554E14AC8323BD = {
+						CreatedOnToolsVersion = 26.0;
+						TestTargetID = FA72C8A33C894679A1B3236A;
+					};
 					FA72C8A33C894679A1B3236A = {
 						CreatedOnToolsVersion = 26.0;
 					};
@@ -100,6 +151,7 @@
 			projectRoot = "";
 			targets = (
 				FA72C8A33C894679A1B3236A /* WifyRadar */,
+				0E4936CFB6554E14AC8323BD /* WifyRadarTests */,
 			);
 		};
 /* End PBXProject section */
@@ -115,6 +167,13 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		1B7AA6CAC0BD4C79AEE90C63 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8CECBEE750D449D5B3EA7CD5 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -124,7 +183,39 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		23C80D33C0C147E18A5101BE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FA72C8A33C894679A1B3236A /* WifyRadar */;
+			targetProxy = 2285032F3F5A46F195E1DD7C /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		17F1A70B0B11473DA9AFEB3D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.wifyradar.app.tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/WifyRadar.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/WifyRadar";
+			};
+			name = Debug;
+		};
 		8F56841DB02945B09DCC0834 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -261,6 +352,30 @@
 			};
 			name = Release;
 		};
+		CB077880CD1C4B479FEB3C32 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.wifyradar.app.tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/WifyRadar.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/WifyRadar";
+			};
+			name = Release;
+		};
 		E6BBC5C44BF04FE7A20C7B88 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -306,6 +421,15 @@
 			buildConfigurations = (
 				AE05CC4AE9F34102B458B316 /* Debug */,
 				C9610E1CD4E8419087DBFD8F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3D48451534714AE28435647C /* Build configuration list for PBXNativeTarget "WifyRadarTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				17F1A70B0B11473DA9AFEB3D /* Debug */,
+				CB077880CD1C4B479FEB3C32 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

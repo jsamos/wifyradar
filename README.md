@@ -84,6 +84,8 @@ More detail: [`docs/build.md`](docs/build.md) (first install and rebuild).
 
 Two-phone iCloud sharing needs a paid Apple Developer Program membership (free Personal Team cannot use iCloud). Plan: [`docs/icloud-sharing-plan.md`](docs/icloud-sharing-plan.md).
 
+Contacts access is optional: the owner can pick an invite email from Contacts or type an Apple ID email. Contacts stay on-device; only the selected email is used for the CloudKit invite.
+
 ### Behavioral specs
 
 | Spec | Description |
@@ -91,6 +93,7 @@ Two-phone iCloud sharing needs a paid Apple Developer Program membership (free P
 | [Branded scaffold](openspec/specs/branded-scaffold/spec.md) | Minimal branded app; Simulator build and personal iPhone install |
 | [Lists home](openspec/specs/lists-home/spec.md) | Launch to lists, create/open lists, add items |
 | [Share list](openspec/specs/share-list/spec.md) | Invite another person to a list and keep items in sync |
+| [Invite from contacts](openspec/specs/invite-from-contacts/spec.md) | Optional Contacts pick for share-invite email; permission and privacy rules |
 
 ## Agent skills
 

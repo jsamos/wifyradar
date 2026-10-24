@@ -4,6 +4,8 @@
 <dict>
 	<key>CKSharingSupported</key>
 	<true/>
+	<key>NSContactsUsageDescription</key>
+	<string>wifyradar uses Contacts only to help you pick an Apple ID email when inviting someone to a shared list. Your address book stays on this device.</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>remote-notification</string>

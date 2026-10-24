@@ -8,14 +8,14 @@ Let the list owner choose a share-invite recipient from Contacts after granting 
 
 Before the app reads contact records from `CNContactStore`, it SHALL obtain Contacts authorization. The app SHALL present the system permission prompt when status is not determined, using a privacy usage description that states Contacts are used only to pick an invite recipient email on device.
 
-#### Scenario: First use requests Contacts access
+#### Scenario: First use requests Contacts access [manual]
 
 - GIVEN the owner opens Share on a list they own
 - AND Contacts authorization status is not determined
 - WHEN the owner chooses to pick a recipient from Contacts
 - THEN the system Contacts permission prompt is shown before contact data is read
 
-#### Scenario: Denied access keeps manual email entry
+#### Scenario: Denied access keeps manual email entry [manual]
 
 - GIVEN Contacts authorization is denied or restricted
 - WHEN the owner opens Share on a list they own
@@ -34,7 +34,7 @@ When Contacts access is authorized (or limited), the app SHALL let the owner sel
 - THEN that email appears in the invite recipient field
 - AND the owner can send the invite using the existing CloudKit invite path
 
-#### Scenario: Contact with multiple emails
+#### Scenario: Contact with multiple emails [manual]
 
 - GIVEN Contacts access is authorized
 - AND the owner selects a contact with more than one email address

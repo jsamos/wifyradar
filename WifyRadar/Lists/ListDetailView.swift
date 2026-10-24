@@ -1,6 +1,8 @@
 import CloudKit
+import Contacts
 import CoreData
 import SwiftUI
+import UIKit
 
 struct ListDetailView: View {
     @ObservedObject var list: SharedList
@@ -14,6 +16,8 @@ struct ListDetailView: View {
     @State private var shareErrorMessage: String?
     @State private var inviteURL: URL?
     @State private var isShowingInviteLink = false
+    @State private var emailChoices: ContactEmailChoices?
+    @State private var contactsAccessMessage: String?
 
     private var sortedItems: [ListItem] {
         let items = (list.items as? Set<ListItem>) ?? []
@@ -80,8 +84,14 @@ struct ListDetailView: View {
                             .keyboardType(.emailAddress)
                             .textContentType(.emailAddress)
                             .autocorrectionDisabled()
+
+                        Button {
+                            Task { await chooseFromContacts() }
+                        } label: {
+                            Label("Choose from Contacts", systemImage: "person.crop.circle")
+                        }
                     } footer: {
-                        Text("Invite-only. Enter the Apple ID email used on the other phone.")
+                        Text("Invite-only. Pick a contact or type the Apple ID email used on the other phone.")
                     }
 
                     Section {
@@ -115,6 +125,14 @@ struct ListDetailView: View {
                 }
             }
             .presentationDetents([.medium])
+            .sheet(item: $emailChoices) { choices in
+                ContactEmailListSheet(
+                    contactName: choices.displayName,
+                    emails: choices.emails
+                ) { email in
+                    inviteEmail = email
+                }
+            }
         }
         .sheet(isPresented: $isShowingInviteLink) {
             if let inviteURL {
@@ -144,6 +162,56 @@ struct ListDetailView: View {
         } message: {
             Text(shareErrorMessage ?? "")
         }
+        .alert("Contacts Access", isPresented: Binding(
+            get: { contactsAccessMessage != nil },
+            set: { if !$0 { contactsAccessMessage = nil } }
+        )) {
+            Button("Open Settings") {
+                if let url = URL(string: UIApplication.openSettingsURLString) {
+                    UIApplication.shared.open(url)
+                }
+                contactsAccessMessage = nil
+            }
+            Button("OK", role: .cancel) { contactsAccessMessage = nil }
+        } message: {
+            Text(contactsAccessMessage ?? "")
+        }
+    }
+
+    private func chooseFromContacts() async {
+        switch await ContactInviteAccess.resolveAccess() {
+        case .presentContactPicker:
+            ContactPickerPresenter.shared.present { contact in
+                handleSelectedContact(contact)
+            }
+        case .keepTypedEmailOnly:
+            contactsAccessMessage =
+                "Contacts access is off, so the address book isn’t available. You can enable it in Settings, or type the Apple ID email instead."
+        }
+    }
+
+    private func handleSelectedContact(_ contact: CNContact) {
+        let emails = contact.emailAddresses.map { $0.value as String }
+        switch ContactEmailSelectionLogic.selection(from: emails) {
+        case .none:
+            break
+        case .fill(let email):
+            inviteEmail = email
+        case .choose(let choices):
+            emailChoices = ContactEmailChoices(
+                displayName: Self.displayName(for: contact),
+                emails: choices
+            )
+        }
+    }
+
+    private static func displayName(for contact: CNContact) -> String {
+        let formatter = CNContactFormatter()
+        formatter.style = .fullName
+        if let name = formatter.string(from: contact), !name.isEmpty {
+            return name
+        }
+        return "Choose Email"
     }
 
     private func addItem() {
@@ -193,4 +261,10 @@ struct ListDetailView: View {
             shareErrorMessage = error.localizedDescription
         }
     }
+}
+
+private struct ContactEmailChoices: Identifiable {
+    let id = UUID()
+    let displayName: String
+    let emails: [String]
 }
