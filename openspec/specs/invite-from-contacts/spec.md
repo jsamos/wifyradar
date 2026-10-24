@@ -24,7 +24,7 @@ Before the app reads contact records from `CNContactStore`, it SHALL obtain Cont
 
 ### Requirement: Select recipient email from Contacts
 
-When Contacts access is authorized (or limited), the app SHALL let the owner select a contact email and SHALL place that email in the invite recipient field used by the existing share-invite flow.
+When Contacts access is authorized (or limited), the app SHALL let the owner select a contact and SHALL place a chosen email in the invite recipient field used by the existing share-invite flow. When the contact has more than one email, the app SHALL present a dedicated in-app screen or sheet that lists that contact’s email addresses for the owner to tap; that selection MUST NOT rely on email property picking inside `CNContactPickerViewController`.
 
 #### Scenario: Owner picks a contact email [manual]
 
@@ -38,8 +38,10 @@ When Contacts access is authorized (or limited), the app SHALL let the owner sel
 
 - GIVEN Contacts access is authorized
 - AND the owner selects a contact with more than one email address
-- WHEN the owner chooses one of those emails
-- THEN that chosen email is used as the invite recipient
+- WHEN the app presents a dedicated in-app screen or sheet listing that contact’s email addresses (not email selection inside `CNContactPickerViewController`)
+- AND the owner taps one email in that list
+- THEN that chosen email fills the Share sheet’s invite email field
+- AND that email is used as the invite recipient
 
 ### Requirement: Manual email entry remains available
 

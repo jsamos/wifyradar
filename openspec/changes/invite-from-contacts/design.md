@@ -8,9 +8,10 @@ Extends the existing **share-list** owner Share sheet. Today the owner types an 
 
 1. On “Choose from Contacts” (or equivalent), read `CNContactStore.authorizationStatus(for: .contacts)`.
 2. If **not determined**, call `CNContactStore.requestAccess(for: .contacts)` (or the current iOS authorization API for Contacts). Show the system prompt first; do not enumerate contacts beforehand.
-3. If **authorized** or **limited**, present a contact/email selection UI backed by Contacts (store-backed list and/or system picker used only after access is granted as required by this change’s permission model).
-4. If **denied** or **restricted**, do not open a contacts UI that reads the store; keep the typed-email field; optionally explain that Contacts access can be enabled in Settings.
-5. On email selection, set the Share sheet’s invite email field; send invite uses the unchanged CloudKit path.
+3. If **authorized** or **limited**, present a contact selection UI backed by Contacts (store-backed list and/or system picker used only after access is granted as required by this change’s permission model).
+4. If the chosen contact has **exactly one** email, put that email in the Share sheet’s invite field.
+5. If the chosen contact has **more than one** email, present a **dedicated in-app screen or sheet** (not email property selection inside `CNContactPickerViewController`) that lists that contact’s email addresses; the owner taps one email, which fills the Share sheet’s invite email field. Send invite uses the unchanged CloudKit path.
+6. If **denied** or **restricted**, do not open a contacts UI that reads the store; keep the typed-email field; optionally explain that Contacts access can be enabled in Settings.
 
 ### Privacy
 
@@ -32,7 +33,7 @@ Extends the existing **share-list** owner Share sheet. Today the owner types an 
 |------|------|
 | `Config/Info.plist` | `NSContactsUsageDescription` |
 | `WifyRadar/Lists/ListDetailView.swift` | Share sheet: Contacts action + keep email `TextField` |
-| `WifyRadar/Sharing/` (new helper as needed) | Authorization + contact/email selection wired to invite email binding |
+| `WifyRadar/Sharing/` (new helper as needed) | Authorization + contact selection; dedicated in-app email-list sheet when a contact has multiple emails |
 | `PersistenceController.invite` | Unchanged; still takes an email string |
 
 ## Auth
