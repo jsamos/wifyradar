@@ -46,7 +46,7 @@ xcodebuild -version
 
 The iOS SDK and the Simulator **runtime** are separate. Building for a physical iPhone needs the iOS platform; running in Simulator needs a downloaded runtime.
 
-1. In Xcode → **Settings** → **Platforms** (or **Components**), download **iOS Simulator** for the installed iOS SDK version (for example iOS 26.5).
+1. In Xcode → **Settings** → **Platforms** (or **Components**), download **one** iOS Simulator runtime matching the installed SDK (for example iOS 27.1). Do not also download older or nearby runtimes unless you intentionally need them for older-OS Simulator testing.
 2. Or from the terminal:
 
 ```bash
@@ -61,6 +61,8 @@ xcrun simctl list devices available
 
 You should see at least one iPhone simulator under an iOS runtime. An empty device list usually means the runtime is still missing or still downloading.
 
+Toolchain upgrade notes (Xcode 27.1): [`docs/system-upgrade-27.1.md`](docs/system-upgrade-27.1.md).
+
 ### Verify
 
 ```bash
@@ -69,7 +71,7 @@ xcodebuild -version
 xcrun simctl list devices available
 ```
 
-You should see a Swift version, Xcode 26.x, and at least one available iPhone simulator. If `xcodebuild` or `simctl` report that only Command Line Tools are selected, re-run the `xcode-select` step above.
+You should see Swift 6.4, Xcode 27.1, and at least one available iPhone simulator. If `xcodebuild` or `simctl` report that only Command Line Tools are selected, re-run the `xcode-select` step above.
 
 ## Run
 

@@ -16,7 +16,7 @@ Use Xcode for the iOS toolchain (build, Simulator, device install, signing), not
 
 ### Toolchain (installed)
 
-- Baseline toolchain is **Xcode 26.x** with platform SDKs such as **iOS 26.5** / **macOS 26.5**. Confirm with `xcodebuild -version` and the selected platforms in Xcode’s component installer.
+- Baseline toolchain is **Xcode 27.1** with platform SDKs such as **iOS 27.1** / **macOS 27.0** (Swift **6.4**). Confirm with `xcodebuild -version` and the selected platforms in Xcode’s component installer. Upgrade notes: [`docs/system-upgrade-27.1.md`](docs/system-upgrade-27.1.md).
 - An iOS app needs the **iOS** platform component installed (not only macOS, which may be marked built-in). watchOS / tvOS / visionOS are optional and unused here unless a feature needs them.
 - Do not assume Xcode 16.x / Swift 5.x / iOS 18-era defaults when choosing APIs; match the project’s deployment target and the SDK reported by `xcodebuild`.
 - From Cursor, drive builds/tests/simulators via **`xcodebuild`**, **`xcrun simctl`**, and related CLI.
