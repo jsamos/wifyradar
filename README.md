@@ -82,7 +82,7 @@ You should see Swift 6.4, Xcode 27.1, and at least one available iPhone simulato
 
 More detail: [`docs/build.md`](docs/build.md) (first install and rebuild).
 
-Two-phone iCloud sharing needs a paid Apple Developer Program membership (free Personal Team cannot use iCloud). Verification checkpoints: [`docs/icloud-sharing-plan.md`](docs/icloud-sharing-plan.md).
+Two-phone iCloud sharing needs a paid Apple Developer Program membership (free Personal Team cannot use iCloud). Plan: [`docs/icloud-sharing-plan.md`](docs/icloud-sharing-plan.md).
 
 ### Behavioral specs
 
