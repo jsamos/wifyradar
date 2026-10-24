@@ -61,3 +61,32 @@ The app SHALL use Contacts data only on-device to fill the invite recipient emai
 - WHEN the invite is created
 - THEN CloudKit receives that email for participant lookup
 - AND the app does not transmit other contact fields or the full address book to a custom backend
+
+### Requirement: CloudKit resolves invitee by Apple ID association
+
+When sending a share invite, the app SHALL pass the recipient email to CloudKit participant lookup (`shareParticipant(forEmailAddress:)`). Success depends on whether that email is associated with an Apple ID / iCloud account — not on the email domain alone (for example, a Gmail address MAY be a valid Apple ID). Failure to resolve a participant is expected behavior and SHALL surface to the owner; it MUST NOT succeed silently.
+
+#### Scenario: iCloud.com email resolves and invite succeeds [manual]
+
+- GIVEN the owner is sending a share invite
+- AND the recipient email is an `icloud.com` address associated with an Apple ID
+- WHEN the owner sends the invite
+- THEN CloudKit resolves the participant
+- AND the invite completes so the owner can send the invite link
+
+#### Scenario: Non-iCloud email that is an Apple ID resolves and invite succeeds [manual]
+
+- GIVEN the owner is sending a share invite
+- AND the recipient email is a non-iCloud address (for example `gmail.com`) that is associated with an Apple ID
+- WHEN the owner sends the invite
+- THEN CloudKit resolves the participant
+- AND the invite completes so the owner can send the invite link
+
+#### Scenario: Email not associated with an Apple ID fails visibly [manual]
+
+- GIVEN the owner is sending a share invite
+- AND the recipient email is not associated with any Apple ID
+- WHEN the owner sends the invite
+- THEN CloudKit fails to resolve the participant
+- AND the owner sees the “Couldn’t share list” alert with the error
+- AND the invite does not complete as a silent success

@@ -65,6 +65,12 @@ Replace SwiftData lists-home persistence with the share-list stack — see [`ope
 2. Other phone: open the invite while signed into **the invited Apple ID** (app installed); accept. After import (may take a few seconds), the app should open that list’s detail screen (and the list remains on Lists home). Opening the link on the **owner’s** Apple ID will not add a second copy of the list.
 3. Add an item on either phone; it appears on the other after sync (no new invite).
 
+CloudKit resolves the invitee by Apple ID association, not by domain alone:
+
+1. An `icloud.com` address that is an Apple ID → invite succeeds.
+2. A non-iCloud address (for example Gmail) that is registered as an Apple ID → invite succeeds.
+3. Any email not associated with an Apple ID → CloudKit fails to resolve the participant; the owner sees **Couldn’t share list** with the error (expected; not a silent success).
+
 Both phones can own lists and invite. Each Apple ID needs free iCloud storage or CloudKit returns Quota Exceeded.
 
 **Done when:** the `[manual]` scenarios in [`openspec/specs/share-list/spec.md`](../openspec/specs/share-list/spec.md) pass.

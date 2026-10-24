@@ -68,3 +68,6 @@ No in-app account. Contacts permission is separate from iCloud. CloudKit invite 
 | Contact with multiple emails | *(manual)* | — |
 | Owner types email without Contacts | *(manual)* | — |
 | Only selected email leaves the device for invite | *(manual)* | — |
+| iCloud.com email resolves and invite succeeds | *(manual)* | — |
+| Non-iCloud email that is an Apple ID resolves and invite succeeds | *(manual)* | — |
+| Email not associated with an Apple ID fails visibly | *(manual)* | — |
