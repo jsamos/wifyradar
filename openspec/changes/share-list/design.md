@@ -14,8 +14,9 @@ This change migrates list persistence off SwiftData onto that stack so lists-hom
 
 ### Ownership
 
-- **Owner** = iCloud user who created the list (private store). Only the owner shows Share.
-- **Participant** = accepted a share (shared store).
+- **Owner** = iCloud user who created the list (private store). Only the owner shows Share / Manage Sharing for that list.
+- **Participant** = accepted a share (shared store). Can edit items; **cannot** re-share or manage that same list (CloudKit share administration is owner-only).
+- Equality = each person creates and shares **their own** lists with the other — not re-sharing a list they received.
 - Gate Share with “object is in the private store.”
 
 ### Runtime flow

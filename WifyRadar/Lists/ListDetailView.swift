@@ -18,6 +18,8 @@ struct ListDetailView: View {
     @State private var isShowingInviteLink = false
     @State private var emailChoices: ContactEmailChoices?
     @State private var contactsAccessMessage: String?
+    @State private var isShowingManageSharing = false
+    @State private var canOpenManageSharing = false
 
     private var sortedItems: [ListItem] {
         let items = (list.items as? Set<ListItem>) ?? []
@@ -76,62 +78,14 @@ struct ListDetailView: View {
             }
         }
         .sheet(isPresented: $isShowingShareSheet) {
-            NavigationStack {
-                Form {
-                    Section {
-                        TextField("Their Apple ID email", text: $inviteEmail)
-                            .textInputAutocapitalization(.never)
-                            .keyboardType(.emailAddress)
-                            .textContentType(.emailAddress)
-                            .autocorrectionDisabled()
-
-                        Button {
-                            Task { await chooseFromContacts() }
-                        } label: {
-                            Label("Choose from Contacts", systemImage: "person.crop.circle")
-                        }
-                    } footer: {
-                        Text("Invite-only. Pick a contact or type the Apple ID email used on the other phone.")
-                    }
-
-                    Section {
-                        Button {
-                            Task { await sendInvite() }
-                        } label: {
-                            if isInviting {
-                                ProgressView()
-                            } else {
-                                Text("Send Invite")
-                            }
-                        }
-                        .disabled(
-                            isInviting
-                                || inviteEmail.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-                        )
-
-                        Button("Manage Sharing…") {
-                            Task { await openSystemSharing() }
-                        }
-                    }
+            shareSheet
+                .task {
+                    canOpenManageSharing = persistence.hasPeopleWithAccess(for: list)
                 }
-                .navigationTitle("Share List")
-                .navigationBarTitleDisplayMode(.inline)
-                .toolbar {
-                    ToolbarItem(placement: .cancellationAction) {
-                        Button("Close") {
-                            isShowingShareSheet = false
-                        }
-                    }
-                }
-            }
-            .presentationDetents([.medium])
-            .sheet(item: $emailChoices) { choices in
-                ContactEmailListSheet(
-                    contactName: choices.displayName,
-                    emails: choices.emails
-                ) { email in
-                    inviteEmail = email
-                }
+        }
+        .sheet(isPresented: $isShowingManageSharing) {
+            ManageSharingView(list: list) { message in
+                shareErrorMessage = message
             }
         }
         .sheet(isPresented: $isShowingInviteLink) {
@@ -175,6 +129,69 @@ struct ListDetailView: View {
             Button("OK", role: .cancel) { contactsAccessMessage = nil }
         } message: {
             Text(contactsAccessMessage ?? "")
+        }
+    }
+
+    private var shareSheet: some View {
+        NavigationStack {
+            Form {
+                Section {
+                    TextField("Their Apple ID email", text: $inviteEmail)
+                        .textInputAutocapitalization(.never)
+                        .keyboardType(.emailAddress)
+                        .textContentType(.emailAddress)
+                        .autocorrectionDisabled()
+
+                    Button {
+                        Task { await chooseFromContacts() }
+                    } label: {
+                        Label("Choose from Contacts", systemImage: "person.crop.circle")
+                    }
+                } footer: {
+                    Text("Invite-only. Pick a contact or type the Apple ID email used on the other phone.")
+                }
+
+                Section {
+                    Button {
+                        Task { await sendInvite() }
+                    } label: {
+                        if isInviting {
+                            ProgressView()
+                        } else {
+                            Text("Send Invite")
+                        }
+                    }
+                    .disabled(
+                        isInviting
+                            || inviteEmail.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+                    )
+
+                    if canOpenManageSharing {
+                        Button("Manage Sharing…") {
+                            isShowingShareSheet = false
+                            isShowingManageSharing = true
+                        }
+                    }
+                }
+            }
+            .navigationTitle("Share List")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Close") {
+                        isShowingShareSheet = false
+                    }
+                }
+            }
+        }
+        .presentationDetents([.medium])
+        .sheet(item: $emailChoices) { choices in
+            ContactEmailListSheet(
+                contactName: choices.displayName,
+                emails: choices.emails
+            ) { email in
+                inviteEmail = email
+            }
         }
     }
 
@@ -248,19 +265,6 @@ struct ListDetailView: View {
         }
     }
 
-    private func openSystemSharing() async {
-        do {
-            persistence.save()
-            let prepared = try await persistence.share(list)
-            isShowingShareSheet = false
-            CloudSharingCoordinator.shared.present(
-                share: prepared,
-                container: persistence.ckContainer
-            )
-        } catch {
-            shareErrorMessage = error.localizedDescription
-        }
-    }
 }
 
 private struct ContactEmailChoices: Identifiable {

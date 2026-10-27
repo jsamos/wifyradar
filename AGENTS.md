@@ -103,10 +103,10 @@ Prefer **Swift Testing** (`@Test`, `#expect`, `try #require`) for new unit tests
 When a test target exists, run the full suite before committing any change:
 
 ```bash
-xcodebuild test -scheme WifyRadar -destination 'platform=iOS Simulator,name=iPhone 17'
+xcodebuild test -scheme WifyRadar -destination 'platform=iOS Simulator,name=iPhone Duo,OS=27.1'
 ```
 
-Adjust the scheme or destination if the project’s simulators differ. All tests must pass. Do not commit if tests fail. Fix the failing tests first.
+Use **iPhone Duo** (this machine’s available simulator). All tests must pass. Do not commit if tests fail. Fix the failing tests first.
 
 Until a test target exists, rely on OpenSpec `[manual]` scenarios and `docs/` for verification (Simulator launch, personal device install).
 

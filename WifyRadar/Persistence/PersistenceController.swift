@@ -92,14 +92,44 @@ final class PersistenceController {
     }
 
     func share(_ list: SharedList) async throws -> CKShare {
-        if let existing = try existingShare(for: list) {
-            existing.publicPermission = .none
-            return existing
-        }
-        let (_, share, _) = try await container.share([list], to: nil)
+        let existing = try existingShare(for: list)
+        let (_, share, _) = try await container.share([list], to: existing)
         share[CKShare.SystemFieldKey.title] = (list.name ?? "List") as CKRecordValue
         share.publicPermission = .none
         return share
+    }
+
+    func participants(for list: SharedList) throws -> [CKShare.Participant] {
+        guard let share = try existingShare(for: list) else { return [] }
+        return share.participants.filter { $0.role != .owner }
+    }
+
+    func hasPeopleWithAccess(for list: SharedList) -> Bool {
+        (try? participants(for: list).isEmpty) == false
+    }
+
+    func removeParticipant(_ participant: CKShare.Participant, from list: SharedList) async throws {
+        guard let privateStore else {
+            throw PersistenceError.missingPrivateStore
+        }
+        guard let share = try existingShare(for: list) else {
+            throw PersistenceError.missingShareURL
+        }
+        share.removeParticipant(participant)
+        _ = try await persistUpdatedShare(share, in: privateStore)
+    }
+
+    func stopSharing(_ list: SharedList) async throws {
+        guard let privateStore else {
+            throw PersistenceError.missingPrivateStore
+        }
+        guard let share = try existingShare(for: list) else {
+            throw PersistenceError.missingShareURL
+        }
+        for participant in share.participants where participant.role != .owner {
+            share.removeParticipant(participant)
+        }
+        _ = try await persistUpdatedShare(share, in: privateStore)
     }
 
     func invite(emailAddress: String, to list: SharedList) async throws -> URL {
@@ -159,6 +189,7 @@ enum PersistenceError: Error {
     case missingPrivateStore
     case invalidInvitee
     case missingShareURL
+    case missingShare
 }
 
 extension PersistenceError: LocalizedError {
@@ -172,6 +203,8 @@ extension PersistenceError: LocalizedError {
             return "Enter the other person’s Apple ID email."
         case .missingShareURL:
             return "CloudKit didn’t return an invite link."
+        case .missingShare:
+            return "This list isn’t shared yet."
         }
     }
 }

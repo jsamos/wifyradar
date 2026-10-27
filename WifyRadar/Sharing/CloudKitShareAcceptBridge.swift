@@ -10,10 +10,18 @@ final class ShareNavigationStore {
 
     var isOpeningSharedList = false
     var pendingListURI: URL?
+    var acceptErrorMessage: String?
+    var pendingAcceptMetadata: CKShare.Metadata?
 
     func clearPending() {
         pendingListURI = nil
         isOpeningSharedList = false
+        clearAcceptFailure()
+    }
+
+    func clearAcceptFailure() {
+        acceptErrorMessage = nil
+        pendingAcceptMetadata = nil
     }
 }
 
@@ -63,6 +71,8 @@ enum ShareAcceptance {
     static func handle(_ metadata: CKShare.Metadata) {
         Task {
             let navigation = ShareNavigationStore.shared
+            navigation.acceptErrorMessage = nil
+            navigation.pendingAcceptMetadata = metadata
             navigation.isOpeningSharedList = true
             navigation.pendingListURI = nil
 
@@ -87,6 +97,7 @@ enum ShareAcceptance {
                         before: before
                     ) {
                         navigation.pendingListURI = opened.objectID.uriRepresentation()
+                        navigation.pendingAcceptMetadata = nil
                         return
                     }
                     try? await Task.sleep(for: .milliseconds(250))
@@ -100,12 +111,15 @@ enum ShareAcceptance {
                     before: before
                 ) {
                     navigation.pendingListURI = opened.objectID.uriRepresentation()
+                    navigation.pendingAcceptMetadata = nil
                 } else {
-                    navigation.isOpeningSharedList = false
+                    navigation.pendingAcceptMetadata = metadata
+                    navigation.acceptErrorMessage =
+                        "The shared list didn’t appear. Check your connection and try again."
                 }
             } catch {
-                navigation.isOpeningSharedList = false
-                print("Share accept failed: \(error)")
+                navigation.pendingAcceptMetadata = metadata
+                navigation.acceptErrorMessage = error.localizedDescription
             }
         }
     }

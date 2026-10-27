@@ -90,5 +90,155 @@ When sending a share invite, the app SHALL pass the recipient email to CloudKit 
 - AND the recipient email is not associated with any Apple ID
 - WHEN the owner sends the invite
 - THEN CloudKit fails to resolve the participant
-- AND the owner sees the “Couldn’t share list” alert with the error
+- AND the owner sees the “Couldn’t share list” alert with an explanation that the address must be an Apple ID email
 - AND the invite does not complete as a silent success
+
+### Requirement: Manage Sharing
+
+**Ownership model:** The CloudKit share **owner** is the iCloud user who created the list (private store). Only that owner sees **Share** on list detail and can invite, open Manage Sharing, remove people, or stop sharing for **that** list. A **participant** who accepted the share can view/edit items; they MUST NOT see Share (and therefore have no Manage Sharing experience) on that list. Equality between two people is achieved by **each owning their own lists** and inviting the other.
+
+The list owner SHALL see a **Share** control on list detail for lists they own and open a Share sheet from it. **Manage Sharing…** SHALL appear on that sheet only when at least one other person has access (invited or accepted). From Manage Sharing the owner can view who has access, remove a person, and stop sharing. A participant MUST NOT see Share on a list they only accepted. The app MUST NOT rely on the system Collaboration / `UICloudSharingController` manage UI for manage actions. Failures to load or update sharing SHALL surface a visible error (not a silent no-op).
+
+#### Scenario: Owner sees Share on a list they own [manual]
+
+- GIVEN the user created a list (list is in the private store)
+- WHEN they open that list’s detail
+- THEN a Share control is visible
+
+#### Scenario: Recipient does not see Share on a list shared with them [manual]
+
+- GIVEN the user is a participant on a list they did not create (shared store)
+- WHEN they open that list’s detail
+- THEN the Share control is not shown at all
+- AND there is no path to Manage Sharing for that list
+- AND they can still view and edit items
+
+#### Scenario: Owner opens Share sheet before anyone has access [manual]
+
+- GIVEN the user owns a list and no one else has been invited
+- WHEN the owner taps Share
+- THEN the Share sheet appears for that list
+- AND the owner can send an invite
+- AND Manage Sharing… is not available
+
+#### Scenario: Owner opens Share sheet when someone has access [manual]
+
+- GIVEN the user owns a list and at least one other person has been invited or has accepted
+- WHEN the owner taps Share
+- THEN the Share sheet appears for that list
+- AND the owner can send an invite
+- AND Manage Sharing… is available
+
+#### Scenario: Owner opens Manage Sharing [manual]
+
+- GIVEN the owner is on the Share sheet and Manage Sharing… is available
+- WHEN the owner chooses Manage Sharing…
+- THEN an in-app Manage Sharing screen appears for that list
+
+#### Scenario: People with access lists invitees only [manual]
+
+- GIVEN the owner has shared the list with at least one other person
+- WHEN the owner opens Manage Sharing…
+- THEN People with access lists those invitees or participants
+- AND the owner is not listed
+
+#### Scenario: Owner removes a person [manual]
+
+- GIVEN Manage Sharing lists a person with access
+- WHEN the owner chooses Remove for that person
+- THEN that person disappears from People with access after the update succeeds
+- AND the owner’s list remains on the owner’s device
+- AND after CloudKit sync that person no longer has access to the list
+
+#### Scenario: Owner stops sharing [manual]
+
+- GIVEN Manage Sharing is open for a shared list
+- WHEN the owner chooses Stop Sharing
+- THEN everyone else loses access to the share
+- AND the owner’s list remains on the owner’s device
+
+#### Scenario: Owner can invite again after stopping sharing [manual]
+
+- GIVEN the owner previously stopped sharing a list via Manage Sharing…
+- WHEN the owner uses the Share sheet Send Invite flow again for that list
+- THEN a new invite can be created successfully
+- AND a participant can accept and see the list again
+- AND Manage Sharing… becomes available again after someone has access
+
+#### Scenario: Either person can share lists they own [manual]
+
+- GIVEN two users A and B
+- WHEN A creates a list and invites B, and B creates a different list and invites A
+- THEN each sees Share only on lists they created
+- AND on lists they only accepted, Share is not shown
+
+#### Scenario: Manage Sharing fails with a visible error [manual]
+
+- GIVEN the owner opens Manage Sharing… or tries Remove / Stop Sharing
+- WHEN loading or updating the share fails
+- THEN the owner sees a visible error
+- AND the failure is not only a silent dismiss
+
+### Requirement: Share invite process outcomes
+
+The app SHALL handle the invite → accept process outcomes below. This requirement covers only sharing (sending and accepting an invite), not item sync after a share is already accepted.
+
+When accepting a share fails after the app has started the accept path (including when the list never appears after accept), the app SHALL keep the finding-list screen visible, switch it to an error state that the share could not be opened, and offer **Retry** and **Go to Lists** (dismiss). The app MUST NOT dismiss that screen to Lists home with no explanation. The following scenarios cover accept failure when the invite was invalidated before accept, plus the error-screen actions.
+
+#### Scenario: List deleted before accept [manual]
+
+- GIVEN the owner sent a share invite for a list
+- AND the owner deletes that list before the participant accepts
+- WHEN the participant opens the invite and the app runs accept
+- THEN the finding-list screen stays up and shows that the share could not be opened
+- AND the participant is offered Retry and Go to Lists
+
+#### Scenario: List unshared before accept [manual]
+
+- GIVEN the owner sent a share invite for a list
+- AND the owner stops sharing / removes the invitee via Manage Sharing before the participant accepts
+- WHEN the participant opens the invite and the app runs accept
+- THEN the finding-list screen stays up and shows that the share could not be opened
+- AND the participant is offered Retry and Go to Lists
+
+#### Scenario: Retry after accept failure [manual]
+
+- GIVEN the finding-list screen is showing the accept-failure error state
+- AND the app still has share metadata available for this session
+- WHEN the participant chooses Retry
+- THEN the error state clears and the finding-list loading state returns
+- AND the app runs accept again with the retained invite metadata
+- AND if accept still fails the error state is shown again
+- AND if accept succeeds the app continues the normal open-list path
+
+#### Scenario: Go to Lists after accept failure [manual]
+
+- GIVEN the finding-list screen is showing the accept-failure error state
+- WHEN the participant chooses Go to Lists
+- THEN the finding-list screen is dismissed
+- AND the participant is on Lists home
+- AND the accept-failure error state is cleared
+
+#### Scenario: Import is slow then succeeds
+
+- GIVEN the participant accepted a share invite
+- AND the shared list is not immediately available locally
+- WHEN the app is waiting for CloudKit import
+- THEN the app shows the finding-list interstitial
+- AND once the list is available the app opens that list’s detail screen
+
+#### Scenario: Import never arrives after accept [manual]
+
+- GIVEN the participant accepted a share invite
+- WHEN the shared list does not become available within the app’s wait window
+- THEN the finding-list screen stays up and shows that the shared list could not be opened
+- AND the participant is offered Retry and Go to Lists
+- AND the app MUST NOT leave them on Lists home with no explanation
+
+#### Scenario: Owner opens their own invite link
+
+- GIVEN a share invite was created by the list owner
+- WHEN the owner opens that invite while signed into the owner Apple ID
+- THEN the app does not treat this as a failed import with no message
+- AND the app indicates the user is already on this list (or already the owner)
+- AND the app opens the existing list’s detail screen
