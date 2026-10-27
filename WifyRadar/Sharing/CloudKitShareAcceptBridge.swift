@@ -12,6 +12,8 @@ final class ShareNavigationStore {
     var pendingListURI: URL?
     var acceptErrorMessage: String?
     var pendingAcceptMetadata: CKShare.Metadata?
+    var ownerNoticeMessage: String?
+    var pendingOwnerListURI: URL?
 
     func clearPending() {
         pendingListURI = nil
@@ -22,6 +24,11 @@ final class ShareNavigationStore {
     func clearAcceptFailure() {
         acceptErrorMessage = nil
         pendingAcceptMetadata = nil
+    }
+
+    func clearOwnerNotice() {
+        ownerNoticeMessage = nil
+        pendingOwnerListURI = nil
     }
 }
 
@@ -72,9 +79,15 @@ enum ShareAcceptance {
         Task {
             let navigation = ShareNavigationStore.shared
             navigation.acceptErrorMessage = nil
+            navigation.ownerNoticeMessage = nil
             navigation.pendingAcceptMetadata = metadata
             navigation.isOpeningSharedList = true
             navigation.pendingListURI = nil
+
+            if metadata.participantRole == .owner {
+                await openExistingOwnedList(metadata: metadata)
+                return
+            }
 
             var attempts = 0
             while PersistenceController.shared.sharedStore == nil, attempts < 50 {
@@ -122,6 +135,44 @@ enum ShareAcceptance {
                 navigation.acceptErrorMessage = error.localizedDescription
             }
         }
+    }
+
+    @MainActor
+    private static func openExistingOwnedList(metadata: CKShare.Metadata) async {
+        let navigation = ShareNavigationStore.shared
+        let persistence = PersistenceController.shared
+
+        var attempts = 0
+        while persistence.privateStore == nil, attempts < 50 {
+            attempts += 1
+            try? await Task.sleep(for: .milliseconds(100))
+        }
+
+        let context = persistence.viewContext
+        context.refreshAllObjects()
+        let lists = (try? context.fetch(SharedList.fetchRequest())) ?? []
+
+        if let opened = resolveOwnedList(metadata: metadata, lists: lists) {
+            let listURI = opened.objectID.uriRepresentation()
+            navigation.pendingAcceptMetadata = nil
+            navigation.isOpeningSharedList = false
+            try? await Task.sleep(for: .milliseconds(300))
+            navigation.pendingOwnerListURI = listURI
+            navigation.ownerNoticeMessage = "You’re already the owner of this list."
+            return
+        }
+
+        navigation.pendingAcceptMetadata = nil
+        navigation.acceptErrorMessage =
+            "Couldn’t find this list on this phone. Open it from Lists if it’s already there."
+    }
+
+    @MainActor
+    private static func resolveOwnedList(
+        metadata: CKShare.Metadata,
+        lists: [SharedList]
+    ) -> SharedList? {
+        resolveOpenedList(metadata: metadata, lists: lists, before: [])
     }
 
     @MainActor

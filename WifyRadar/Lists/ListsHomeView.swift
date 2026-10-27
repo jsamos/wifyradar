@@ -14,6 +14,8 @@ struct ListsHomeView: View {
     @State private var path = NavigationPath()
     @State private var isCreatingList = false
     @State private var newListName = ""
+    @State private var showOwnerNotice = false
+    @State private var ownerListObjectID: NSManagedObjectID?
 
     var body: some View {
         NavigationStack(path: $path) {
@@ -80,30 +82,56 @@ struct ListsHomeView: View {
                 }
                 .presentationDetents([.medium])
             }
-            .onChange(of: shareNavigation.pendingListURI) { _, uri in
-                openPendingSharedList(uri)
-            }
-            .onAppear {
+            .task(id: shareNavigation.pendingListURI?.absoluteString) {
                 openPendingSharedList(shareNavigation.pendingListURI)
+            }
+            .onChange(of: shareNavigation.ownerNoticeMessage) { _, message in
+                guard message != nil else {
+                    showOwnerNotice = false
+                    return
+                }
+                if let uri = shareNavigation.pendingOwnerListURI,
+                   let objectID = context.persistentStoreCoordinator?
+                    .managedObjectID(forURIRepresentation: uri) {
+                    ownerListObjectID = objectID
+                } else {
+                    ownerListObjectID = nil
+                }
+                showOwnerNotice = true
+            }
+            .alert("Already the owner", isPresented: $showOwnerNotice) {
+                Button("OK") {
+                    openOwnerListAfterOK()
+                }
+            } message: {
+                Text(shareNavigation.ownerNoticeMessage ?? "You’re already the owner of this list.")
             }
         }
         .overlay {
             if shareNavigation.isOpeningSharedList {
                 ShareInviteLoadingView()
-                    .transition(.opacity)
                     .zIndex(1)
             }
         }
-        .animation(.easeInOut(duration: 0.2), value: shareNavigation.isOpeningSharedList)
     }
 
     private func openPendingSharedList(_ uri: URL?) {
         guard let uri,
+              shareNavigation.pendingListURI == uri,
               let objectID = context.persistentStoreCoordinator?
                 .managedObjectID(forURIRepresentation: uri)
         else { return }
-        path.append(objectID)
         shareNavigation.clearPending()
+        path.append(objectID)
+    }
+
+    private func openOwnerListAfterOK() {
+        let objectID = ownerListObjectID
+        ownerListObjectID = nil
+        shareNavigation.clearOwnerNotice()
+        showOwnerNotice = false
+        guard let objectID else { return }
+        path.append(objectID)
     }
 
     private func createList() {

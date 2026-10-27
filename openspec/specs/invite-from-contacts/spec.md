@@ -8,33 +8,36 @@ Let the list owner choose a share-invite recipient from Contacts after granting 
 
 Before the app reads contact records from `CNContactStore`, it SHALL obtain Contacts authorization. The app SHALL present the system permission prompt when status is not determined, using a privacy usage description that states Contacts are used only to pick an invite recipient email on device.
 
-#### Scenario: First use requests Contacts access [manual]
+#### Scenario: First use requests Contacts access [tested]
 
 - GIVEN the owner opens Share on a list they own
 - AND Contacts authorization status is not determined
 - WHEN the owner chooses to pick a recipient from Contacts
 - THEN the system Contacts permission prompt is shown before contact data is read
+- **Test:** `notDeterminedRequestsThenProceeds()` — [`WifyRadarTests/ContactInviteAccessTests.swift`](../../../WifyRadarTests/ContactInviteAccessTests.swift)
 
-#### Scenario: Denied access keeps manual email entry [manual]
+#### Scenario: Denied access keeps manual email entry [tested]
 
 - GIVEN Contacts authorization is denied or restricted
 - WHEN the owner opens Share on a list they own
 - THEN the owner can still type an Apple ID email and send an invite
 - AND the app does not read contact records from `CNContactStore`
+- **Test:** `deniedKeepsTypedEmail()` — [`WifyRadarTests/ContactInviteAccessTests.swift`](../../../WifyRadarTests/ContactInviteAccessTests.swift)
 
 ### Requirement: Select recipient email from Contacts
 
 When Contacts access is authorized (or limited), the app SHALL let the owner select a contact and SHALL place a chosen email in the invite recipient field used by the existing share-invite flow. When the contact has more than one email, the app SHALL present a dedicated in-app screen or sheet that lists that contact’s email addresses for the owner to tap; that selection MUST NOT rely on email property picking inside `CNContactPickerViewController`.
 
-#### Scenario: Owner picks a contact email [manual]
+#### Scenario: Owner picks a contact email [tested]
 
 - GIVEN Contacts access is authorized
 - AND the owner is on the Share sheet for a list they own
 - WHEN the owner picks a contact that has an email address
 - THEN that email appears in the invite recipient field
 - AND the owner can send the invite using the existing CloudKit invite path
+- **Test:** `oneEmailFillsField()` — [`WifyRadarTests/ContactEmailSelectionTests.swift`](../../../WifyRadarTests/ContactEmailSelectionTests.swift)
 
-#### Scenario: Contact with multiple emails [manual]
+#### Scenario: Contact with multiple emails [tested]
 
 - GIVEN Contacts access is authorized
 - AND the owner selects a contact with more than one email address
@@ -42,12 +45,13 @@ When Contacts access is authorized (or limited), the app SHALL let the owner sel
 - AND the owner taps one email in that list
 - THEN that chosen email fills the Share sheet’s invite email field
 - AND that email is used as the invite recipient
+- **Test:** `manyEmailsPresentChoices()` — [`WifyRadarTests/ContactEmailSelectionTests.swift`](../../../WifyRadarTests/ContactEmailSelectionTests.swift)
 
 ### Requirement: Manual email entry remains available
 
 The app SHALL continue to allow the owner to type an Apple ID / iCloud email without using Contacts.
 
-#### Scenario: Owner types email without Contacts
+#### Scenario: Owner types email without Contacts [manual]
 
 - GIVEN the owner is on the Share sheet for a list they own
 - WHEN the owner types an Apple ID email without picking a contact
@@ -57,7 +61,7 @@ The app SHALL continue to allow the owner to type an Apple ID / iCloud email wit
 
 The app SHALL use Contacts data only on-device to fill the invite recipient email. The app MUST NOT upload the address book or contact list to a custom server. Only the selected email string MAY be sent to CloudKit as part of the existing invite participant lookup.
 
-#### Scenario: Only selected email leaves the device for invite
+#### Scenario: Only selected email leaves the device for invite [manual]
 
 - GIVEN the owner selected a contact email for an invite
 - WHEN the invite is created
@@ -219,7 +223,7 @@ When accepting a share fails after the app has started the accept path (includin
 - AND the participant is on Lists home
 - AND the accept-failure error state is cleared
 
-#### Scenario: Import is slow then succeeds
+#### Scenario: Import is slow then succeeds [manual]
 
 - GIVEN the participant accepted a share invite
 - AND the shared list is not immediately available locally
@@ -235,10 +239,10 @@ When accepting a share fails after the app has started the accept path (includin
 - AND the participant is offered Retry and Go to Lists
 - AND the app MUST NOT leave them on Lists home with no explanation
 
-#### Scenario: Owner opens their own invite link
+#### Scenario: Owner opens their own invite link [manual]
 
 - GIVEN a share invite was created by the list owner
 - WHEN the owner opens that invite while signed into the owner Apple ID
-- THEN the app does not treat this as a failed import with no message
+- THEN the app detects that the current user is the share owner without treating this as a failed participant import
 - AND the app indicates the user is already on this list (or already the owner)
 - AND the app opens the existing list’s detail screen

@@ -62,7 +62,7 @@ Replace SwiftData lists-home persistence with the share-list stack — see [`ope
 - Both online
 
 1. Either phone (as owner of a list): **Share** → enter the other person’s **Apple ID email** → **Send Invite** → send the invite link (Messages, etc.). Invite-only (`publicPermission = .none`). Do not use the system **Collaboration** row (it can open empty).
-2. Other phone: open the invite while signed into **the invited Apple ID** (app installed); accept. After import (may take a few seconds), the app should open that list’s detail screen (and the list remains on Lists home). Opening the link on the **owner’s** Apple ID will not add a second copy of the list.
+2. Other phone: open the invite while signed into **the invited Apple ID** (app installed); accept. After import (may take a few seconds), the app should open that list’s detail screen (and the list remains on Lists home). Opening the link on the **owner’s** Apple ID does not add a second copy: the app opens the existing list and indicates you are already the owner.
 3. Add an item on either phone; it appears on the other after sync (no new invite).
 
 CloudKit resolves the invitee by Apple ID association, not by domain alone:
