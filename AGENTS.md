@@ -96,6 +96,24 @@ Do not mark a scenario `[tested]` until the linked test exists and asserts the T
 
 Commit the specs before writing any implementation code.
 
+## Build
+
+Use **iPhone Duo** (this machine’s available simulator):
+
+```bash
+xcodebuild -scheme WifyRadar -destination 'platform=iOS Simulator,name=iPhone Duo,OS=27.1' build 2>&1 | tee /tmp/wifyradar-build.log
+```
+
+**`BUILD SUCCEEDED` is not enough.** After every build (and before calling work done), inspect the log for Swift diagnostics:
+
+```bash
+rg -i 'error:|warning:' /tmp/wifyradar-build.log
+```
+
+- Treat **`error:`** as failure — fix before continuing.
+- Treat **`warning:`** as blocking for the change that introduced them (and clear existing project warnings when touching that area). Do not report success while the Issue Navigator would still show new Swift warnings.
+- Ignore unrelated runtime console noise (for example Core Data CloudKit `BGSystemTaskScheduler` / `updateTaskRequest` lines while debugging).
+
 ## Tests
 
 Prefer **Swift Testing** (`@Test`, `#expect`, `try #require`) for new unit tests. Use XCTest only when required (e.g. UI automation with `XCUIApplication`).
@@ -106,7 +124,7 @@ When a test target exists, run the full suite before committing any change:
 xcodebuild test -scheme WifyRadar -destination 'platform=iOS Simulator,name=iPhone Duo,OS=27.1'
 ```
 
-Use **iPhone Duo** (this machine’s available simulator). All tests must pass. Do not commit if tests fail. Fix the failing tests first.
+All tests must pass. Do not commit if tests fail. Fix the failing tests first.
 
 Until a test target exists, rely on OpenSpec `[manual]` scenarios and `docs/` for verification (Simulator launch, personal device install).
 

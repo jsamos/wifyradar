@@ -6,12 +6,14 @@ protocol ContactAuthorizationProviding: Sendable {
 }
 
 struct SystemContactAuthorizationProvider: ContactAuthorizationProviding {
-    func authorizationStatus() -> CNAuthorizationStatus {
+    nonisolated init() {}
+
+    nonisolated func authorizationStatus() -> CNAuthorizationStatus {
         CNContactStore.authorizationStatus(for: .contacts)
     }
 
-    func requestAccess() async -> CNAuthorizationStatus {
-        let store = CNContactStore()
+    nonisolated func requestAccess() async -> CNAuthorizationStatus {
+        let store = await MainActor.run { CNContactStore() }
         _ = try? await store.requestAccess(for: .contacts)
         return authorizationStatus()
     }
@@ -36,8 +38,12 @@ enum ContactInviteAccess {
         canSelectContacts(status) ? .presentContactPicker : .keepTypedEmailOnly
     }
 
+    static func resolveAccess() async -> ContactInviteAccessOutcome {
+        await resolveAccess(using: SystemContactAuthorizationProvider())
+    }
+
     static func resolveAccess(
-        using provider: any ContactAuthorizationProviding = SystemContactAuthorizationProvider()
+        using provider: any ContactAuthorizationProviding
     ) async -> ContactInviteAccessOutcome {
         var status = provider.authorizationStatus()
         if status == .notDetermined {

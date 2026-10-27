@@ -184,7 +184,7 @@ enum ShareAcceptance {
         let persistence = PersistenceController.shared
         if let rootRecordID = metadata.hierarchicalRootRecordID {
             for list in lists {
-                if let recordID = try? persistence.container.recordID(for: list.objectID),
+                if let recordID = persistence.container.recordID(for: list.objectID),
                    recordID == rootRecordID {
                     return list
                 }
