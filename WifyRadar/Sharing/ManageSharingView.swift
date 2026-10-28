@@ -12,6 +12,7 @@ struct ManageSharingView: View {
     @State private var isLoading = true
     @State private var isWorking = false
     @State private var confirmStopSharing = false
+    @State private var errorMessage: String?
 
     var body: some View {
         NavigationStack {
@@ -81,6 +82,14 @@ struct ManageSharingView: View {
             } message: {
                 Text("Other people will lose access. Your copy of the list stays.")
             }
+            .alert("Couldn’t update sharing", isPresented: Binding(
+                get: { errorMessage != nil },
+                set: { if !$0 { errorMessage = nil } }
+            )) {
+                Button("OK", role: .cancel) { errorMessage = nil }
+            } message: {
+                Text(errorMessage ?? "")
+            }
             .task {
                 await reload()
             }
@@ -108,7 +117,7 @@ struct ManageSharingView: View {
             try await persistence.removeParticipant(participant, from: list)
             participants = try persistence.participants(for: list)
         } catch {
-            onError(error.localizedDescription)
+            errorMessage = error.localizedDescription
         }
     }
 
@@ -119,7 +128,7 @@ struct ManageSharingView: View {
             try await persistence.stopSharing(list)
             dismiss()
         } catch {
-            onError(error.localizedDescription)
+            errorMessage = error.localizedDescription
         }
     }
 

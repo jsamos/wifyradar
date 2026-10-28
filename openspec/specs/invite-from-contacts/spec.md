@@ -101,7 +101,7 @@ When sending a share invite, the app SHALL pass the recipient email to CloudKit 
 
 **Ownership model:** The CloudKit share **owner** is the iCloud user who created the list (private store). Only that owner sees **Share** on list detail and can invite, open Manage Sharing, remove people, or stop sharing for **that** list. A **participant** who accepted the share can view/edit items; they MUST NOT see Share (and therefore have no Manage Sharing experience) on that list. Equality between two people is achieved by **each owning their own lists** and inviting the other.
 
-The list owner SHALL see a **Share** control on list detail for lists they own and open a Share sheet from it. **Manage Sharing…** SHALL appear on that sheet only when at least one other person has access (invited or accepted). From Manage Sharing the owner can view who has access, remove a person, and stop sharing. A participant MUST NOT see Share on a list they only accepted. The app MUST NOT rely on the system Collaboration / `UICloudSharingController` manage UI for manage actions. Failures to load or update sharing SHALL surface a visible error (not a silent no-op).
+The list owner SHALL see a **Share** control on list detail for lists they own and open a Share sheet from it. **Manage Sharing…** SHALL appear on that sheet only when at least one other person has access (invited or accepted). From Manage Sharing the owner can view who has access, remove a person, and stop sharing. After CloudKit sync, a removed participant’s (or stop-sharing participant’s) Lists home SHALL reflect lost access without requiring an app restart. A participant MUST NOT see Share on a list they only accepted. The app MUST NOT rely on the system Collaboration / `UICloudSharingController` manage UI for manage actions. Failures to load or update sharing SHALL surface a visible error (not a silent no-op).
 
 #### Scenario: Owner sees Share on a list they own [manual]
 
@@ -149,17 +149,24 @@ The list owner SHALL see a **Share** control on list detail for lists they own a
 #### Scenario: Owner removes a person [manual]
 
 - GIVEN Manage Sharing lists a person with access
+- AND that person can see the shared list on their Lists home
 - WHEN the owner chooses Remove for that person
 - THEN that person disappears from People with access after the update succeeds
 - AND the owner’s list remains on the owner’s device
-- AND after CloudKit sync that person no longer has access to the list
+- AND after CloudKit sync on the removed person’s device (app still in foreground or background, not force-quit)
+- THEN that list is no longer on their Lists home (or is no longer openable from Lists home)
+- AND an app restart is not required for Lists home to reflect the loss of access
 
 #### Scenario: Owner stops sharing [manual]
 
 - GIVEN Manage Sharing is open for a shared list
+- AND a participant can see that list on their Lists home
 - WHEN the owner chooses Stop Sharing
 - THEN everyone else loses access to the share
 - AND the owner’s list remains on the owner’s device
+- AND after CloudKit sync on a participant’s device (app still in foreground or background, not force-quit)
+- THEN that list is no longer on their Lists home (or is no longer openable from Lists home)
+- AND an app restart is not required for Lists home to reflect the loss of access
 
 #### Scenario: Owner can invite again after stopping sharing [manual]
 

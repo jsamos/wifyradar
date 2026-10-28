@@ -7,6 +7,7 @@ import UIKit
 struct ListDetailView: View {
     @ObservedObject var list: SharedList
     @Environment(\.managedObjectContext) private var context
+    @Environment(\.dismiss) private var dismiss
     private let persistence = PersistenceController.shared
 
     @State private var newItemTitle = ""
@@ -66,6 +67,16 @@ struct ListDetailView: View {
         }
         .navigationTitle(list.name ?? "List")
         .navigationBarTitleDisplayMode(.inline)
+        .onReceive(
+            NotificationCenter.default.publisher(
+                for: .NSManagedObjectContextObjectsDidChange,
+                object: context
+            )
+        ) { _ in
+            if list.isDeleted || list.managedObjectContext == nil {
+                dismiss()
+            }
+        }
         .toolbar {
             if canManageShare {
                 ToolbarItem(placement: .primaryAction) {

@@ -11,6 +11,8 @@ final class PersistenceController {
     let container: NSPersistentCloudKitContainer
     private(set) var privateStore: NSPersistentStore?
     private(set) var sharedStore: NSPersistentStore?
+    private var remoteChangeObserver: (any NSObjectProtocol)?
+    private let historyMerger: PersistentHistoryMerger
 
     var ckContainer: CKContainer {
         CKContainer(identifier: CloudKitConfig.containerIdentifier)
@@ -22,6 +24,7 @@ final class PersistenceController {
 
     init(inMemory: Bool = false) {
         container = NSPersistentCloudKitContainer(name: "WifyRadar")
+        historyMerger = PersistentHistoryMerger(container: container)
 
         guard let privateDescription = container.persistentStoreDescriptions.first else {
             fatalError("Missing default store description")
@@ -69,11 +72,32 @@ final class PersistenceController {
 
         container.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
         container.viewContext.automaticallyMergesChangesFromParent = true
+        container.viewContext.transactionAuthor = "wifyradar"
+        container.viewContext.name = "viewContext"
+        observeRemoteStoreChanges()
     }
 
     private func store(matching description: NSPersistentStoreDescription) -> NSPersistentStore? {
         guard let url = description.url else { return nil }
         return container.persistentStoreCoordinator.persistentStores.first { $0.url == url }
+    }
+
+    private func observeRemoteStoreChanges() {
+        remoteChangeObserver = NotificationCenter.default.addObserver(
+            forName: .NSPersistentStoreRemoteChange,
+            object: container.persistentStoreCoordinator,
+            queue: nil
+        ) { [weak self] _ in
+            self?.historyMerger.scheduleMerge()
+        }
+    }
+
+    private func withRemoteRefreshSuppressed<T>(
+        _ operation: () async throws -> T
+    ) async rethrows -> T {
+        historyMerger.beginSuppression()
+        defer { historyMerger.endSuppression() }
+        return try await operation()
     }
 
     func save() {
@@ -109,49 +133,58 @@ final class PersistenceController {
     }
 
     func removeParticipant(_ participant: CKShare.Participant, from list: SharedList) async throws {
-        guard let privateStore else {
-            throw PersistenceError.missingPrivateStore
+        try await withRemoteRefreshSuppressed {
+            guard let privateStore else {
+                throw PersistenceError.missingPrivateStore
+            }
+            guard let share = try existingShare(for: list) else {
+                throw PersistenceError.missingShareURL
+            }
+            guard let live = ShareParticipantMatching.liveParticipant(matching: participant, in: share) else {
+                throw PersistenceError.missingShareParticipant
+            }
+            share.removeParticipant(live)
+            _ = try await persistUpdatedShare(share, in: privateStore)
         }
-        guard let share = try existingShare(for: list) else {
-            throw PersistenceError.missingShareURL
-        }
-        share.removeParticipant(participant)
-        _ = try await persistUpdatedShare(share, in: privateStore)
     }
 
     func stopSharing(_ list: SharedList) async throws {
-        guard let privateStore else {
-            throw PersistenceError.missingPrivateStore
+        try await withRemoteRefreshSuppressed {
+            guard let privateStore else {
+                throw PersistenceError.missingPrivateStore
+            }
+            guard let share = try existingShare(for: list) else {
+                throw PersistenceError.missingShareURL
+            }
+            for participant in share.participants where participant.role != .owner {
+                share.removeParticipant(participant)
+            }
+            _ = try await persistUpdatedShare(share, in: privateStore)
         }
-        guard let share = try existingShare(for: list) else {
-            throw PersistenceError.missingShareURL
-        }
-        for participant in share.participants where participant.role != .owner {
-            share.removeParticipant(participant)
-        }
-        _ = try await persistUpdatedShare(share, in: privateStore)
     }
 
     func invite(emailAddress: String, to list: SharedList) async throws -> URL {
-        let trimmed = emailAddress.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard !trimmed.isEmpty else {
-            throw PersistenceError.invalidInvitee
-        }
-        guard let privateStore else {
-            throw PersistenceError.missingPrivateStore
-        }
+        try await withRemoteRefreshSuppressed {
+            let trimmed = emailAddress.trimmingCharacters(in: .whitespacesAndNewlines)
+            guard !trimmed.isEmpty else {
+                throw PersistenceError.invalidInvitee
+            }
+            guard let privateStore else {
+                throw PersistenceError.missingPrivateStore
+            }
 
-        let share = try await share(list)
-        let participant = try await ckContainer.shareParticipant(forEmailAddress: trimmed)
-        participant.permission = .readWrite
-        participant.role = .privateUser
-        share.addParticipant(participant)
+            let share = try await share(list)
+            let participant = try await ckContainer.shareParticipant(forEmailAddress: trimmed)
+            participant.permission = .readWrite
+            participant.role = .privateUser
+            share.addParticipant(participant)
 
-        let saved = try await persistUpdatedShare(share, in: privateStore)
-        guard let url = saved.url else {
-            throw PersistenceError.missingShareURL
+            let saved = try await persistUpdatedShare(share, in: privateStore)
+            guard let url = saved.url else {
+                throw PersistenceError.missingShareURL
+            }
+            return url
         }
-        return url
     }
 
     func acceptShare(metadata: CKShare.Metadata) async throws {
@@ -190,6 +223,7 @@ enum PersistenceError: Error {
     case invalidInvitee
     case missingShareURL
     case missingShare
+    case missingShareParticipant
 }
 
 extension PersistenceError: LocalizedError {
@@ -205,6 +239,8 @@ extension PersistenceError: LocalizedError {
             return "CloudKit didn’t return an invite link."
         case .missingShare:
             return "This list isn’t shared yet."
+        case .missingShareParticipant:
+            return "Couldn’t find that person on the share. Close Manage Sharing and try again."
         }
     }
 }
