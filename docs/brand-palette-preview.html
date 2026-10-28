@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>wifyradar brand palette (from AppIcon)</title>
+  <style>
+    :root {
+      --brand-light: #FD99BF;
+      --brand-mid: #FC57A4;
+      --brand-primary: #FB2682;
+      --brand-deep: #F90C77;
+      --on-brand: #FFFFFF;
+      --legacy-accent: #6BC79E;
+      --page: #111;
+      --card: #1c1c1e;
+      --text: #f2f2f7;
+      --muted: #8e8e93;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif;
+      background: var(--page);
+      color: var(--text);
+      line-height: 1.4;
+      padding: 24px;
+    }
+    h1 { font-size: 1.35rem; font-weight: 600; margin: 0 0 8px; }
+    p { color: var(--muted); margin: 0 0 24px; max-width: 40rem; }
+    .grid {
+      display: grid;
+      gap: 16px;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      margin-bottom: 32px;
+    }
+    .swatch {
+      border-radius: 16px;
+      overflow: hidden;
+      background: var(--card);
+      border: 1px solid #2c2c2e;
+    }
+    .chip { height: 96px; }
+    .meta {
+      padding: 12px 14px 14px;
+      font-size: 0.85rem;
+    }
+    .meta strong { display: block; color: var(--text); margin-bottom: 4px; }
+    .meta code { color: var(--muted); font-size: 0.8rem; }
+    .role {
+      color: var(--muted);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 2px;
+    }
+    .gradient-demo {
+      height: 140px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, var(--brand-light) 0%, var(--brand-mid) 45%, var(--brand-deep) 100%);
+      display: grid;
+      place-items: center;
+      margin-bottom: 12px;
+      border: 1px solid #2c2c2e;
+    }
+    .gradient-demo span {
+      color: var(--on-brand);
+      font-size: 4.5rem;
+      font-weight: 700;
+      letter-spacing: -0.06em;
+      text-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+    }
+    .compare {
+      display: grid;
+      gap: 16px;
+      grid-template-columns: 1fr 1fr;
+      max-width: 520px;
+      margin-bottom: 32px;
+    }
+    @media (max-width: 560px) {
+      .compare { grid-template-columns: 1fr; }
+    }
+    .pair .chip { border-radius: 12px 12px 0 0; }
+    h2 { font-size: 1rem; font-weight: 600; margin: 0 0 12px; }
+  </style>
+</head>
+<body>
+  <h1>wifyradar brand palette</h1>
+  <p>
+    Colors sampled from
+    <code>WifyRadar/Assets.xcassets/AppIcon.appiconset/AppIcon.png</code>.
+    Review swatches here before wiring tokens into the app.
+  </p>
+
+  <h2>Icon gradient (proposed Brand.gradient)</h2>
+  <div class="gradient-demo" title="topLeading light → bottomTrailing deep">
+    <span>W</span>
+  </div>
+  <p style="margin-top:0">
+    Direction matches the icon: light pink (top-leading) → deep magenta (bottom-trailing), white glyph.
+  </p>
+
+  <h2>Proposed tokens</h2>
+  <div class="grid">
+    <div class="swatch">
+      <div class="chip" style="background: var(--brand-light)"></div>
+      <div class="meta">
+        <div class="role">BrandLight</div>
+        <strong>Gradient start</strong>
+        <code>#FD99BF</code>
+      </div>
+    </div>
+    <div class="swatch">
+      <div class="chip" style="background: var(--brand-mid)"></div>
+      <div class="meta">
+        <div class="role">Brand mid (optional)</div>
+        <strong>Mid field</strong>
+        <code>#FC57A4</code>
+      </div>
+    </div>
+    <div class="swatch">
+      <div class="chip" style="background: var(--brand-primary)"></div>
+      <div class="meta">
+        <div class="role">BrandPrimary / AccentColor</div>
+        <strong>Accent / tint</strong>
+        <code>#FB2682</code>
+      </div>
+    </div>
+    <div class="swatch">
+      <div class="chip" style="background: var(--brand-deep)"></div>
+      <div class="meta">
+        <div class="role">BrandDeep</div>
+        <strong>Gradient end</strong>
+        <code>#F90C77</code>
+      </div>
+    </div>
+    <div class="swatch">
+      <div class="chip" style="background: var(--on-brand); border-bottom: 1px solid #2c2c2e"></div>
+      <div class="meta">
+        <div class="role">BrandOnBrand</div>
+        <strong>On pink fills</strong>
+        <code>#FFFFFF</code>
+      </div>
+    </div>
+  </div>
+
+  <h2>Accent swap</h2>
+  <div class="compare">
+    <div class="swatch pair">
+      <div class="chip" style="background: var(--legacy-accent)"></div>
+      <div class="meta">
+        <div class="role">Current AccentColor</div>
+        <strong>Teal (today)</strong>
+        <code>#6BC79E</code>
+      </div>
+    </div>
+    <div class="swatch pair">
+      <div class="chip" style="background: var(--brand-primary)"></div>
+      <div class="meta">
+        <div class="role">Proposed AccentColor</div>
+        <strong>Brand primary</strong>
+        <code>#FB2682</code>
+      </div>
+    </div>
+  </div>
+
+  <h2>On-brand example</h2>
+  <div style="display:inline-flex; gap:12px; align-items:center; flex-wrap:wrap; margin-bottom:24px">
+    <button type="button" style="
+      border:0; border-radius:999px; padding:12px 22px;
+      background: var(--brand-primary); color: var(--on-brand);
+      font: inherit; font-weight: 600;
+    ">Create List</button>
+    <button type="button" style="
+      border:0; border-radius:14px; padding:12px 22px;
+      background: linear-gradient(135deg, var(--brand-light), var(--brand-deep));
+      color: var(--on-brand); font: inherit; font-weight: 600;
+    ">Gradient CTA</button>
+    <span style="color: var(--brand-primary); font-weight: 600;">checked item tint</span>
+  </div>
+</body>
+</html>

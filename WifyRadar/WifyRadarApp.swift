@@ -9,6 +9,7 @@ struct WifyRadarApp: App {
         WindowGroup {
             ListsHomeView()
                 .environment(\.managedObjectContext, persistence.viewContext)
+                .tint(Brand.primary)
         }
     }
 }

@@ -86,6 +86,8 @@ Two-phone iCloud sharing needs a paid Apple Developer Program membership (free P
 
 Contacts access is optional: the owner can pick an invite email from Contacts or type an Apple ID email. Contacts stay on-device; only the selected email is used for the CloudKit invite. Opening your own invite link opens the existing list and notes that you are already the owner. After iCloud sync, remove/stop sharing updates the other person’s Lists home without requiring an app relaunch. Deleting a list you own removes it for everyone after sync; leaving a shared list (participant delete) stops participation so it does not come back on resync.
 
+Brand accent colors come from the app icon (pink gradient). Preview: [`docs/brand-palette-preview.html`](docs/brand-palette-preview.html).
+
 ### Behavioral specs
 
 | Spec | Description |
