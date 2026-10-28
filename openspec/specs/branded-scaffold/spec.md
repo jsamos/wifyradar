@@ -6,15 +6,19 @@ Minimal wifyradar iPhone app used to validate build and personal-device install.
 
 ### Requirement: Branded launch UI
 
-The app SHALL present a single primary screen whose dominant text is the product name **wifyradar**.
+On launch, the app SHALL show a branded splash whose dominant marks are a large **W** and the product name **wifyradar**, on a black background, with the tagline **Stay synced. Stay happy**. The splash SHALL appear on cold start before Lists home is interactive. Lists home remains the first interactive screen after the splash (see lists-home).
 
-The screen MAY include one short supporting sentence. It SHALL NOT present list, todo, or settings chrome in this scaffold.
-
-#### Scenario: Branded launch screen appears [manual]
+#### Scenario: Branded splash appears on launch [manual]
 
 - GIVEN the app is installed on a simulator or device
-- WHEN the user launches the app
-- THEN the first screen shows **wifyradar** as the primary brand signal
+- WHEN the user cold-starts the app
+- THEN a black splash appears with a branded **W**, **wifyradar**, and **Stay synced. Stay happy**
+
+#### Scenario: Lists home follows splash [manual]
+
+- GIVEN the user cold-starts the app
+- WHEN the splash finishes
+- THEN Lists home is the first interactive screen
 
 ### Requirement: Simulator build
 

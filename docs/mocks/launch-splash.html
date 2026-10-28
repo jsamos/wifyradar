@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>wifyradar — launch splash mock</title>
+  <style>
+    :root {
+      --brand-light: #FD99BF;
+      --brand-mid: #FC57A4;
+      --brand-primary: #FB2682;
+      --brand-deep: #F90C77;
+      --on-brand: #FFFFFF;
+      --page: #0e0e10;
+      --muted: #8e8e93;
+      --text: #f2f2f7;
+      --frame: #2c2c2e;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, "SF Pro Text", Segoe UI, sans-serif;
+      background: var(--page);
+      color: var(--text);
+      padding: 28px 24px 48px;
+      line-height: 1.45;
+    }
+    h1 { font-size: 1.35rem; font-weight: 600; margin: 0 0 8px; }
+    p { color: var(--muted); margin: 0 0 12px; max-width: 42rem; }
+    .note {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-bottom: 28px;
+      max-width: 42rem;
+    }
+    .note code { color: #c7c7cc; }
+    .grid {
+      display: grid;
+      gap: 28px;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      align-items: start;
+    }
+    .card h2 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin: 0 0 6px;
+    }
+    .card .desc {
+      color: var(--muted);
+      font-size: 0.8rem;
+      margin: 0 0 14px;
+      min-height: 2.4em;
+    }
+    .phone {
+      width: 260px;
+      height: 520px;
+      border-radius: 40px;
+      border: 3px solid var(--frame);
+      overflow: hidden;
+      position: relative;
+      box-shadow: 0 0 0 1px #000;
+      background: #000;
+    }
+    .notch {
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 96px;
+      height: 28px;
+      background: #000;
+      border-radius: 18px;
+      z-index: 2;
+    }
+    .splash {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 18px;
+      padding: 24px;
+      text-align: center;
+    }
+    .splash-a {
+      background: linear-gradient(135deg, var(--brand-light) 0%, var(--brand-mid) 45%, var(--brand-deep) 100%);
+    }
+    .splash-b {
+      background: var(--brand-primary);
+    }
+    .splash-c {
+      background: #000;
+    }
+    .glyph {
+      color: var(--on-brand);
+      font-size: 88px;
+      font-weight: 700;
+      letter-spacing: -0.08em;
+      line-height: 1;
+      text-shadow: 0 2px 16px rgba(0, 0, 0, 0.12);
+    }
+    .splash-c .glyph {
+      background: linear-gradient(135deg, var(--brand-light), var(--brand-deep));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-shadow: none;
+    }
+    .wordmark {
+      color: var(--on-brand);
+      font-size: 1.35rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+    .splash-c .wordmark { color: var(--text); }
+    .tag {
+      color: rgba(255, 255, 255, 0.85);
+      font-size: 0.85rem;
+      font-weight: 400;
+      max-width: 11rem;
+    }
+    .splash-c .tag { color: var(--muted); }
+    .home {
+      position: absolute;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 108px;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.45);
+      border-radius: 4px;
+      z-index: 2;
+    }
+    .splash-c .home { background: rgba(255, 255, 255, 0.25); }
+    .flow {
+      margin-top: 36px;
+      padding-top: 24px;
+      border-top: 1px solid #2c2c2e;
+      max-width: 42rem;
+    }
+    .flow ol { margin: 8px 0 0; padding-left: 1.2rem; color: var(--muted); }
+    .flow li { margin-bottom: 6px; }
+  </style>
+</head>
+<body>
+  <h1>Launch splash — mock for approval</h1>
+  <p>
+    Today the app opens straight on Lists home (by design after lists-home).
+    There is no branded system launch screen, so cold start feels blank → lists.
+  </p>
+  <p class="note">
+    Hexes match <code>docs/brand-palette-preview.html</code> / asset catalog.
+    Pick a direction (or mix). After approval we can wire a UIKit/SwiftUI launch screen
+    and keep Lists as the first interactive screen.
+  </p>
+
+  <div class="grid">
+    <div class="card">
+      <h2>A — Icon gradient + wordmark</h2>
+      <p class="desc">Closest to the app icon. Strong brand hit on every cold start.</p>
+      <div class="phone" aria-label="Splash option A">
+        <div class="notch"></div>
+        <div class="splash splash-a">
+          <div class="glyph">W</div>
+          <div class="wordmark">wifyradar</div>
+          <div class="tag">Stay synced. Stay happy</div>
+        </div>
+        <div class="home"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>B — Flat primary + wordmark</h2>
+      <p class="desc">Simpler; matches AccentColor / BrandPrimary only.</p>
+      <div class="phone" aria-label="Splash option B">
+        <div class="notch"></div>
+        <div class="splash splash-b">
+          <div class="glyph">W</div>
+          <div class="wordmark">wifyradar</div>
+        </div>
+        <div class="home"></div>
+      </div>
+    </div>
+
+    <div class="card" style="outline:1px solid var(--brand-primary); outline-offset:8px; border-radius:8px; padding:8px;">
+      <h2>C — Dark + gradient W (preferred)</h2>
+      <p class="desc">Quieter; brand in the glyph only. Tagline: Stay synced. Stay happy</p>
+      <div class="phone" aria-label="Splash option C preferred">
+        <div class="notch"></div>
+        <div class="splash splash-c">
+          <div class="glyph">W</div>
+          <div class="wordmark">wifyradar</div>
+          <div class="tag">Stay synced. Stay happy</div>
+        </div>
+        <div class="home"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="flow">
+    <h2 style="font-size:0.95rem; margin:0 0 4px;">Proposed behavior (after approval)</h2>
+    <ol>
+      <li><strong>System launch screen</strong> — option <strong>C</strong>: black background, gradient W, wordmark, tagline “Stay synced. Stay happy”.</li>
+      <li><strong>Lists home</strong> — first interactive screen (unchanged from lists-home spec).</li>
+      <li>Optional: very short in-app brand fade only if the system splash isn’t enough (usually unnecessary).</li>
+    </ol>
+  </div>
+</body>
+</html>
