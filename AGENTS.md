@@ -96,6 +96,18 @@ Do not mark a scenario `[tested]` until the linked test exists and asserts the T
 
 Commit the specs before writing any implementation code.
 
+## Brand
+
+Brand colors come from the app icon. Preview: [`docs/brand-palette-preview.html`](docs/brand-palette-preview.html). API: [`WifyRadar/Brand/Brand.swift`](WifyRadar/Brand/Brand.swift). Named colors live in `Assets.xcassets` (`BrandPrimary`, `BrandLight`, `BrandMid`, `BrandDeep`, `BrandOnBrand`). `AccentColor` matches `BrandPrimary`.
+
+When adding or changing UI:
+
+- Use `Brand.primary` / `Brand.light` / `Brand.mid` / `Brand.deep` / `Brand.onBrand`, `Brand.gradient`, and `Brand.Radius` — or `Color.accentColor` / `.tint` when the system accent is enough.
+- Do **not** introduce new hex literals, parallel palettes, or one-off pinks that drift from the catalog.
+- Prefer SwiftUI semantic text and backgrounds (`.primary`, `.secondary`, system grouped backgrounds) unless the surface is intentionally branded.
+- If the icon palette changes, update the asset catalog (and `BrandCatalogTests` frozen samples) — do not “fix” tint only in views.
+- HTML / mock sheets under `docs/` SHOULD use the same hex values as the catalog when previewing UI for approval.
+
 ## Build
 
 Use **iPhone Duo** (this machine’s available simulator):
