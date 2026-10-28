@@ -45,8 +45,14 @@ struct ListsHomeView: View {
                     }
                 }
             }
-            .navigationTitle("wifyradar")
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
+                ToolbarItem(placement: .principal) {
+                    Text("wifyradar")
+                        .font(.title2.weight(.bold))
+                        .foregroundStyle(Brand.gradient)
+                        .accessibilityAddTraits(.isHeader)
+                }
                 ToolbarItem(placement: .primaryAction) {
                     Button {
                         isCreatingList = true

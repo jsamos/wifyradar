@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>wifyradar — Lists home header mocks</title>
+  <style>
+    :root {
+      --brand-light: #FD99BF;
+      --brand-mid: #FC57A4;
+      --brand-primary: #FB2682;
+      --brand-deep: #F90C77;
+      --on-brand: #FFFFFF;
+      --page: #e8e8ed;
+      --muted: #8e8e93;
+      --text: #000000;
+      --frame: #c7c7cc;
+      --list-bg: #f2f2f7;
+      --row: #ffffff;
+      --sep: #c6c6c8;
+      --nav: rgba(249, 249, 249, 0.94);
+      --label: #3a3a3c;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, "SF Pro Text", Segoe UI, sans-serif;
+      background: var(--page);
+      color: var(--label);
+      padding: 28px 24px 48px;
+      line-height: 1.45;
+    }
+    h1 { font-size: 1.35rem; font-weight: 600; margin: 0 0 8px; color: #111; }
+    p { color: #636366; margin: 0 0 12px; max-width: 44rem; }
+    .note { color: #636366; font-size: 0.9rem; margin-bottom: 28px; max-width: 44rem; }
+    .note code { color: #3a3a3c; background: #fff; padding: 1px 5px; border-radius: 4px; }
+    .grid {
+      display: grid;
+      gap: 28px;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      align-items: start;
+    }
+    .card h2 { font-size: 0.95rem; font-weight: 600; margin: 0 0 6px; color: #111; }
+    .card .desc { color: #636366; font-size: 0.8rem; margin: 0 0 14px; min-height: 2.6em; }
+    .phone {
+      width: 260px;
+      height: 420px;
+      border-radius: 40px;
+      border: 3px solid var(--frame);
+      overflow: hidden;
+      position: relative;
+      background: var(--list-bg);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    }
+    .notch {
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 96px;
+      height: 28px;
+      background: #111;
+      border-radius: 18px;
+      z-index: 3;
+    }
+    .status {
+      height: 54px;
+      padding: 14px 22px 0;
+      font-size: 12px;
+      font-weight: 600;
+      display: flex;
+      justify-content: space-between;
+      color: var(--text);
+      position: relative;
+      z-index: 2;
+    }
+    .nav {
+      background: var(--nav);
+      backdrop-filter: blur(16px);
+      border-bottom: 0.5px solid var(--sep);
+      padding: 6px 14px 12px;
+      min-height: 52px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .nav-leading { flex: 1; min-width: 0; }
+    .plus {
+      width: 30px;
+      height: 30px;
+      border-radius: 999px;
+      background: var(--brand-primary);
+      color: var(--on-brand);
+      display: grid;
+      place-items: center;
+      font-size: 18px;
+      font-weight: 500;
+      flex-shrink: 0;
+      margin-bottom: 2px;
+    }
+    .title-plain {
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      color: var(--text);
+    }
+    .title-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .mark-w {
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: -0.08em;
+      line-height: 1;
+      background: linear-gradient(135deg, var(--brand-light), var(--brand-deep));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .mark-badge {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, var(--brand-light), var(--brand-deep));
+      color: var(--on-brand);
+      display: grid;
+      place-items: center;
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: -0.06em;
+      flex-shrink: 0;
+    }
+    .word-grad {
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      background: linear-gradient(135deg, var(--brand-light), var(--brand-deep));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .subtitle {
+      margin-top: 2px;
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--muted);
+    }
+    .inline-w {
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      color: var(--text);
+    }
+    .inline-w .w {
+      background: linear-gradient(135deg, var(--brand-light), var(--brand-deep));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .list {
+      padding: 10px 12px 20px;
+    }
+    .group {
+      background: var(--row);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .row {
+      padding: 12px 14px;
+      font-size: 16px;
+      border-bottom: 0.5px solid var(--sep);
+      display: flex;
+      justify-content: space-between;
+      color: var(--text);
+    }
+    .row:last-child { border-bottom: 0; }
+    .chev { color: var(--muted); }
+    .home {
+      position: absolute;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 108px;
+      height: 4px;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Lists home header — mocks (light)</h1>
+  <p>
+    Styled like the current light app chrome (grouped list on system gray, white rows).
+    Today the nav title is plain <code>wifyradar</code>.
+  </p>
+  <p class="note">
+    Brand pinks match the catalog / splash. Pick a direction (or mix).
+  </p>
+
+  <div class="grid">
+    <div class="card">
+      <h2>A — Current</h2>
+      <p class="desc">Large system title: “wifyradar”. Baseline for comparison.</p>
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="status"><span>9:41</span><span>●●●</span></div>
+        <div class="nav">
+          <div class="nav-leading"><div class="title-plain">wifyradar</div></div>
+          <div class="plus">+</div>
+        </div>
+        <div class="list">
+          <div class="group">
+            <div class="row">Groceries <span class="chev">›</span></div>
+            <div class="row">Weekend <span class="chev">›</span></div>
+          </div>
+        </div>
+        <div class="home"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>B — Gradient W + wordmark</h2>
+      <p class="desc">Small gradient W mark beside “wifyradar”. Ties header to splash without shouting.</p>
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="status"><span>9:41</span><span>●●●</span></div>
+        <div class="nav">
+          <div class="nav-leading">
+            <div class="title-row">
+              <span class="mark-w">W</span>
+              <span class="title-plain" style="font-size:26px">wifyradar</span>
+            </div>
+          </div>
+          <div class="plus">+</div>
+        </div>
+        <div class="list">
+          <div class="group">
+            <div class="row">Groceries <span class="chev">›</span></div>
+            <div class="row">Weekend <span class="chev">›</span></div>
+          </div>
+        </div>
+        <div class="home"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>C — Badge + “Lists”</h2>
+      <p class="desc">Brand lives in a pink badge; nav title is the screen name “Lists” (clearer IA).</p>
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="status"><span>9:41</span><span>●●●</span></div>
+        <div class="nav">
+          <div class="nav-leading">
+            <div class="title-row">
+              <span class="mark-badge">W</span>
+              <span class="title-plain" style="font-size:28px">Lists</span>
+            </div>
+          </div>
+          <div class="plus">+</div>
+        </div>
+        <div class="list">
+          <div class="group">
+            <div class="row">Groceries <span class="chev">›</span></div>
+            <div class="row">Weekend <span class="chev">›</span></div>
+          </div>
+        </div>
+        <div class="home"></div>
+      </div>
+    </div>
+
+    <div class="card" style="outline:2px solid var(--brand-primary); outline-offset:8px; border-radius:8px; padding:8px;">
+      <h2>D — Gradient wordmark (chosen)</h2>
+      <p class="desc">Full “wifyradar” in brand gradient. Chosen for Lists home nav.</p>
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="status"><span>9:41</span><span>●●●</span></div>
+        <div class="nav">
+          <div class="nav-leading"><div class="word-grad">wifyradar</div></div>
+          <div class="plus">+</div>
+        </div>
+        <div class="list">
+          <div class="group">
+            <div class="row">Groceries <span class="chev">›</span></div>
+            <div class="row">Weekend <span class="chev">›</span></div>
+          </div>
+        </div>
+        <div class="home"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>E — Wordmark + tagline</h2>
+      <p class="desc">Plain title with splash tagline under it. More personality; taller header.</p>
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="status"><span>9:41</span><span>●●●</span></div>
+        <div class="nav">
+          <div class="nav-leading">
+            <div class="title-plain" style="font-size:26px">wifyradar</div>
+            <div class="subtitle">Stay synced. Stay happy</div>
+          </div>
+          <div class="plus">+</div>
+        </div>
+        <div class="list">
+          <div class="group">
+            <div class="row">Groceries <span class="chev">›</span></div>
+            <div class="row">Weekend <span class="chev">›</span></div>
+          </div>
+        </div>
+        <div class="home"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>F — Gradient leading W in word</h2>
+      <p class="desc">Only the first letter is branded; rest stays black. Subtle nod to the splash.</p>
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="status"><span>9:41</span><span>●●●</span></div>
+        <div class="nav">
+          <div class="nav-leading">
+            <div class="inline-w"><span class="w">w</span>ifyradar</div>
+          </div>
+          <div class="plus">+</div>
+        </div>
+        <div class="list">
+          <div class="group">
+            <div class="row">Groceries <span class="chev">›</span></div>
+            <div class="row">Weekend <span class="chev">›</span></div>
+          </div>
+        </div>
+        <div class="home"></div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
