@@ -118,15 +118,18 @@ rg -i 'error:|warning:' /tmp/wifyradar-build.log
 
 Prefer **Swift Testing** (`@Test`, `#expect`, `try #require`) for new unit tests. Use XCTest only when required (e.g. UI automation with `XCUIApplication`).
 
-When a test target exists, run the full suite before committing any change:
+**Do not run the full test suite after every incremental build** — Simulator test launches dominate wall time. Day-to-day: **build + warning scan** is enough. Run tests for logic you changed, and the **full suite before committing**.
+
+Always go through the helper (it boots **iPhone Duo** first — raw `xcodebuild test` often hangs for minutes when the sim is Shutdown):
 
 ```bash
-xcodebuild test -scheme WifyRadar -destination 'platform=iOS Simulator,name=iPhone Duo,OS=27.1'
+./scripts/test.sh
+./scripts/test.sh PersistentHistoryMergerTests
+./scripts/test.sh PersistentHistoryMergerTests/mergeAppliesDeletes
+./scripts/test.sh --without-building ShareParticipantMatchingTests   # after a successful build
 ```
 
-All tests must pass. Do not commit if tests fail. Fix the failing tests first.
-
-Until a test target exists, rely on OpenSpec `[manual]` scenarios and `docs/` for verification (Simulator launch, personal device install).
+Full log: `/tmp/wifyradar-test.log`. All tests must pass before commit. Fix failures first.
 
 **Rule of thumb:** if the change affects app behavior or logic users rely on — new output, different format, new rules — add or update automated tests when that logic can run under `xcodebuild test`. Mock external services when testing those flows; don't skip tests just because the code path involves an external call.
 
