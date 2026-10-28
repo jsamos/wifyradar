@@ -70,7 +70,7 @@ set +e
 xcodebuild "${ACTION[@]}" \
   -scheme "$SCHEME" \
   -destination "platform=iOS Simulator,id=${UDID}" \
-  "${FILTERS[@]}" \
+  ${FILTERS[@]+"${FILTERS[@]}"} \
   2>&1 | tee "$LOG" | rg --line-buffered -i 'error:|Test case|TEST SUCCEEDED|TEST FAILED|Testing failed|Executed [0-9]+ test'
 status=${PIPESTATUS[0]}
 set -e

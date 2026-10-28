@@ -131,6 +131,10 @@ Always go through the helper (it boots **iPhone Duo** first — raw `xcodebuild 
 
 Full log: `/tmp/wifyradar-test.log`. All tests must pass before commit. Fix failures first.
 
-**Rule of thumb:** if the change affects app behavior or logic users rely on — new output, different format, new rules — add or update automated tests when that logic can run under `xcodebuild test`. Mock external services when testing those flows; don't skip tests just because the code path involves an external call.
+**Prefer execution tests.** Whenever possible, automated tests SHALL run the real app code path under test (call the function/type that production calls), not a parallel reimplementation or a pure “shape of the return value” check detached from that path. Assert outcomes **and** side effects of that execution.
+
+**Mock external libraries at the boundary.** Wrap CloudKit, system share UI, Contacts auth, network, etc. behind small protocols (as with `ContactAuthorizationProviding`). In tests, inject recording mocks and confirm the **right APIs were called** during execution (method, arguments, call count, order when it matters). Do not skip tests because a path touches an external framework — mock the framework edge and still execute the app logic. Reserve `[manual]` for true multi-device / live-account CloudKit (or similar) that cannot run in CI.
+
+**Rule of thumb:** if the change affects app behavior or logic users rely on — new output, different format, new rules — add or update automated tests when that logic can run under `xcodebuild test`.
 
 **Mock fidelity:** When wrapping an external API, capture the real response format before writing parsers or tests. Run the integration once (script or manual call), log the raw response, and base parsers and test mocks on that actual output — not on assumptions about the format. Speculative mocks that match the parser rather than reality will pass tests but hide bugs.

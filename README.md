@@ -84,7 +84,7 @@ More detail: [`docs/build.md`](docs/build.md) (first install and rebuild).
 
 Two-phone iCloud sharing needs a paid Apple Developer Program membership (free Personal Team cannot use iCloud). Plan: [`docs/icloud-sharing-plan.md`](docs/icloud-sharing-plan.md).
 
-Contacts access is optional: the owner can pick an invite email from Contacts or type an Apple ID email. Contacts stay on-device; only the selected email is used for the CloudKit invite. Opening your own invite link opens the existing list and notes that you are already the owner. After iCloud sync, remove/stop sharing updates the other person’s Lists home without requiring an app relaunch.
+Contacts access is optional: the owner can pick an invite email from Contacts or type an Apple ID email. Contacts stay on-device; only the selected email is used for the CloudKit invite. Opening your own invite link opens the existing list and notes that you are already the owner. After iCloud sync, remove/stop sharing updates the other person’s Lists home without requiring an app relaunch. Deleting a list you own removes it for everyone after sync; leaving a shared list (participant delete) stops participation so it does not come back on resync.
 
 ### Behavioral specs
 

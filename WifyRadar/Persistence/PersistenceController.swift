@@ -13,6 +13,7 @@ final class PersistenceController {
     private(set) var sharedStore: NSPersistentStore?
     private var remoteChangeObserver: (any NSObjectProtocol)?
     private let historyMerger: PersistentHistoryMerger
+    private let zonePurger: any SharedZonePurging
 
     var ckContainer: CKContainer {
         CKContainer(identifier: CloudKitConfig.containerIdentifier)
@@ -22,9 +23,11 @@ final class PersistenceController {
         container.viewContext
     }
 
-    init(inMemory: Bool = false) {
-        container = NSPersistentCloudKitContainer(name: "WifyRadar")
+    init(inMemory: Bool = false, zonePurger: (any SharedZonePurging)? = nil) {
+        let container = NSPersistentCloudKitContainer(name: "WifyRadar")
+        self.container = container
         historyMerger = PersistentHistoryMerger(container: container)
+        self.zonePurger = zonePurger ?? CloudKitSharedZonePurger(container: container)
 
         guard let privateDescription = container.persistentStoreDescriptions.first else {
             fatalError("Missing default store description")
@@ -109,6 +112,43 @@ final class PersistenceController {
     func isInPrivateStore(_ object: NSManagedObject) -> Bool {
         guard let store = object.objectID.persistentStore, let privateStore else { return false }
         return store == privateStore
+    }
+
+    func isInSharedStore(_ object: NSManagedObject) -> Bool {
+        guard let store = object.objectID.persistentStore, let sharedStore else { return false }
+        return store == sharedStore
+    }
+
+    func deleteOrLeave(_ list: SharedList) async throws {
+        try await withRemoteRefreshSuppressed {
+            if isInPrivateStore(list) {
+                try await DeleteOrLeaveList.perform(
+                    list: list,
+                    ownership: .owned,
+                    purger: zonePurger
+                ) {
+                    try self.viewContext.save()
+                }
+                return
+            }
+
+            guard isInSharedStore(list) else {
+                throw PersistenceError.missingSharedStore
+            }
+            guard let sharedStore else {
+                throw PersistenceError.missingSharedStore
+            }
+            guard let share = try existingShare(for: list) else {
+                throw PersistenceError.missingShare
+            }
+            try await DeleteOrLeaveList.perform(
+                list: list,
+                ownership: .shared(zoneID: share.recordID.zoneID, store: sharedStore),
+                purger: zonePurger
+            ) {
+                try self.viewContext.save()
+            }
+        }
     }
 
     func existingShare(for object: NSManagedObject) throws -> CKShare? {
@@ -238,7 +278,7 @@ extension PersistenceError: LocalizedError {
         case .missingShareURL:
             return "CloudKit didn’t return an invite link."
         case .missingShare:
-            return "This list isn’t shared yet."
+            return "Couldn’t find the CloudKit share for this list."
         case .missingShareParticipant:
             return "Couldn’t find that person on the share. Close Manage Sharing and try again."
         }

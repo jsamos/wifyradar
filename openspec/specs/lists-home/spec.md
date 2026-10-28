@@ -57,3 +57,17 @@ The app SHALL let the user add a text item to a list and show it on that list’
 - GIVEN the user is viewing a list detail
 - WHEN the user adds a text item
 - THEN the item appears in that list’s items
+
+### Requirement: Delete an owned list
+
+The app SHALL let the user delete a list they own from Lists home. Before deleting, the app SHALL ask for confirmation. After the user confirms, the list SHALL disappear from Lists home and SHALL NOT return on relaunch for that owner.
+
+Shared-list side effects when the deleted list was shared, and participant leave behavior, are specified in [`invite-from-contacts`](../invite-from-contacts/spec.md).
+
+#### Scenario: User deletes an owned list [tested]
+
+- GIVEN the user owns a list that appears on Lists home
+- WHEN the user chooses to delete that list and confirms
+- THEN the list is no longer on Lists home
+- AND after relaunch the list is still gone for that owner
+- **Test:** `ownedDeleteDoesNotPurgeZone()` — [`WifyRadarTests/DeleteOrLeaveListTests.swift`](../../../WifyRadarTests/DeleteOrLeaveListTests.swift) (confirmation UI `[manual]`)

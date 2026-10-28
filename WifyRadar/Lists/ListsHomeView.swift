@@ -16,6 +16,9 @@ struct ListsHomeView: View {
     @State private var newListName = ""
     @State private var showOwnerNotice = false
     @State private var ownerListObjectID: NSManagedObjectID?
+    @State private var pendingDeleteOrLeave: SharedList?
+    @State private var pendingIsOwned = false
+    @State private var errorMessage: String?
 
     var body: some View {
         NavigationStack(path: $path) {
@@ -38,7 +41,7 @@ struct ListsHomeView: View {
                                 Text(list.name ?? "Untitled")
                             }
                         }
-                        .onDelete(perform: deleteLists)
+                        .onDelete(perform: requestDeleteOrLeave)
                     }
                 }
             }
@@ -106,6 +109,37 @@ struct ListsHomeView: View {
             } message: {
                 Text(shareNavigation.ownerNoticeMessage ?? "You’re already the owner of this list.")
             }
+            .confirmationDialog(
+                pendingIsOwned ? "Delete this list?" : "Leave this list?",
+                isPresented: Binding(
+                    get: { pendingDeleteOrLeave != nil },
+                    set: { if !$0 { pendingDeleteOrLeave = nil } }
+                ),
+                titleVisibility: .visible
+            ) {
+                Button(pendingIsOwned ? "Delete" : "Leave", role: .destructive) {
+                    guard let list = pendingDeleteOrLeave else { return }
+                    pendingDeleteOrLeave = nil
+                    Task { await confirmDeleteOrLeave(list) }
+                }
+                Button("Cancel", role: .cancel) {
+                    pendingDeleteOrLeave = nil
+                }
+            } message: {
+                Text(
+                    pendingIsOwned
+                        ? "This permanently deletes the list. Anyone you shared it with will lose access."
+                        : "You’ll leave this shared list. It won’t come back unless you’re invited again."
+                )
+            }
+            .alert("Couldn’t update list", isPresented: Binding(
+                get: { errorMessage != nil },
+                set: { if !$0 { errorMessage = nil } }
+            )) {
+                Button("OK", role: .cancel) { errorMessage = nil }
+            } message: {
+                Text(errorMessage ?? "")
+            }
         }
         .overlay {
             if shareNavigation.isOpeningSharedList {
@@ -145,10 +179,18 @@ struct ListsHomeView: View {
         isCreatingList = false
     }
 
-    private func deleteLists(at offsets: IndexSet) {
-        for index in offsets {
-            context.delete(lists[index])
+    private func requestDeleteOrLeave(at offsets: IndexSet) {
+        guard let index = offsets.first else { return }
+        let list = lists[index]
+        pendingIsOwned = persistence.isInPrivateStore(list)
+        pendingDeleteOrLeave = list
+    }
+
+    private func confirmDeleteOrLeave(_ list: SharedList) async {
+        do {
+            try await persistence.deleteOrLeave(list)
+        } catch {
+            errorMessage = error.localizedDescription
         }
-        persistence.save()
     }
 }
