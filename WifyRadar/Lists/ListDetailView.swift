@@ -35,20 +35,9 @@ struct ListDetailView: View {
         List {
             Section {
                 ForEach(sortedItems, id: \.objectID) { item in
-                    HStack {
-                        Button {
-                            item.isChecked.toggle()
-                            persistence.save()
-                        } label: {
-                            Image(systemName: item.isChecked ? "checkmark.circle.fill" : "circle")
-                                .foregroundStyle(item.isChecked ? Color.accentColor : .secondary)
-                                .accessibilityLabel(item.isChecked ? "Marked done" : "Not done")
-                        }
-                        .buttonStyle(.plain)
-
-                        Text(item.title ?? "")
-                            .strikethrough(item.isChecked)
-                            .foregroundStyle(item.isChecked ? .secondary : .primary)
+                    ListItemRow(item: item) {
+                        item.isChecked.toggle()
+                        persistence.save()
                     }
                 }
                 .onDelete(perform: deleteItems)
@@ -276,6 +265,27 @@ struct ListDetailView: View {
         }
     }
 
+}
+
+private struct ListItemRow: View {
+    @ObservedObject var item: ListItem
+    var onToggleChecked: () -> Void
+
+    var body: some View {
+        HStack {
+            Button(action: onToggleChecked) {
+                Image(systemName: item.isChecked ? "checkmark.circle.fill" : "circle")
+                    .foregroundStyle(item.isChecked ? Color.accentColor : .secondary)
+                    .accessibilityLabel(item.isChecked ? "Marked done" : "Not done")
+            }
+            .buttonStyle(.borderless)
+
+            Text(item.title ?? "")
+                .strikethrough(item.isChecked)
+                .foregroundStyle(item.isChecked ? .secondary : .primary)
+        }
+        .contentShape(Rectangle())
+    }
 }
 
 private struct ContactEmailChoices: Identifiable {
