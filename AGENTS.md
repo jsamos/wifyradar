@@ -6,7 +6,18 @@ The first time I ask for a new feature in a session, familiarize yourself with t
 
 ## Documentation tone
 
-Project docs (`README.md`, OpenSpec, comments meant for readers) MUST be written for a generic reader of the repo. Do **not** include meta remarks from our conversation — transitions that only make sense in chat, “as we discussed,” machine-specific check results, or bridging lines that restate the next heading (e.g. “Command Line Tools alone are not enough… continue with Xcode below”). State facts and steps; let section order carry the flow.
+Project docs (`README.md`, OpenSpec, checklists under `docs/`, comments meant for readers) MUST be written for a generic reader of the repo.
+
+### No meta from chat
+
+Do **not** leak the current conversation into docs. Forbidden patterns include:
+
+- Chat transitions (“as we discussed,” “like you said,” “for this step”)
+- Coaching asides that only exist because of a walkthrough (“ignore the other tiles,” “you don’t need Push Notifications,” “don’t click X”)
+- Machine-specific check results or session status
+- Bridging lines that restate the next heading (e.g. “Command Line Tools alone are not enough… continue with Xcode below”)
+
+State **what to do** and **where** — the path the reader should take. Do not narrate what to skip unless skipping is a real product/safety constraint (not “the UI has other buttons”). Let section order carry the flow.
 
 ## Xcode / platform facts agents may not know
 

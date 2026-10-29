@@ -2,7 +2,7 @@
 
 A shared lists app for iPhone — grocery lists, todos, and anything else you want to keep in sync between a small group.
 
-Built with Swift and SwiftUI. Not intended for App Store distribution; install to personal devices via Xcode (or TestFlight if you have an Apple Developer membership).
+Built with Swift and SwiftUI. Develop and install on personal devices via Xcode. App Store / TestFlight distribution needs a paid [Apple Developer Program](https://developer.apple.com/programs/) membership — checklist: [`docs/app-store-checklist.md`](docs/app-store-checklist.md).
 
 ## Prerequisites
 
@@ -80,7 +80,7 @@ You should see Swift 6.4, Xcode 27.1, and at least one available iPhone simulato
 3. For a real iPhone: left sidebar → blue **WifyRadar** project → **TARGETS → WifyRadar** → **Signing & Capabilities** → check **Automatically manage signing** → set **Team**.
 4. Press **▶**.
 
-More detail: [`docs/build.md`](docs/build.md) (first install and rebuild).
+More detail: [`docs/build.md`](docs/build.md) (first install and rebuild). TestFlight: [`docs/testflight.md`](docs/testflight.md). App Store submission: [`docs/app-store-checklist.md`](docs/app-store-checklist.md).
 
 Two-phone iCloud sharing needs a paid Apple Developer Program membership (free Personal Team cannot use iCloud). Plan: [`docs/icloud-sharing-plan.md`](docs/icloud-sharing-plan.md).
 
