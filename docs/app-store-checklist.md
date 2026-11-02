@@ -1,8 +1,8 @@
 # App Store checklist (wifyradar)
 
-Ship the iPhone app through [App Store Connect](https://appstoreconnect.apple.com). Local installs and Simulator builds: [`build.md`](build.md). iCloud enrollment and container setup: [`icloud-sharing-plan.md`](icloud-sharing-plan.md). TestFlight (Production CloudKit installs): [`testflight.md`](testflight.md).
+Example runbook to ship **wifyradar** through [App Store Connect](https://appstoreconnect.apple.com). Follow sections **in order**. TestFlight detail: [`testflight.md`](testflight.md). Privacy / Support HTTPS pages: [`github-pages.md`](github-pages.md). Local Xcode installs: [`build.md`](build.md). iCloud enrollment: [`icloud-sharing-plan.md`](icloud-sharing-plan.md).
 
-**Identifiers used by this project**
+**Identifiers**
 
 | Item | Value |
 |------|--------|
@@ -10,135 +10,85 @@ Ship the iPhone app through [App Store Connect](https://appstoreconnect.apple.co
 | Bundle ID | `com.wifyradar.app` |
 | iCloud container | `iCloud.com.wifyradar.app` |
 | Xcode project / scheme | `WifyRadar` |
+| SKU | `wifyradar` |
 
-Apple’s overview: [Submitting](https://developer.apple.com/app-store/submitting/), [App privacy details](https://developer.apple.com/app-store/app-privacy-details/).
+Apple: [Submitting](https://developer.apple.com/app-store/submitting/), [App privacy details](https://developer.apple.com/app-store/app-privacy-details/).
 
 ---
 
 ## 1. Accounts and team
 
-- [x] Active paid [Apple Developer Program](https://developer.apple.com/programs/) membership (required for CloudKit and App Store distribution).
+- [x] Active paid [Apple Developer Program](https://developer.apple.com/programs/) membership.
 - [x] Xcode → **Settings → Accounts**: ADP team selected (not only Personal Team).
 - [x] Target **WifyRadar** → **Signing & Capabilities**: **Automatically manage signing**, Team = paid team, Bundle Identifier = `com.wifyradar.app`.
-- [x] Capabilities present: **iCloud** (CloudKit) with container `iCloud.com.wifyradar.app`; **Background Modes** → remote notifications (already in `Config/Info.plist`).
+- [x] Capabilities: **iCloud** (CloudKit) with container `iCloud.com.wifyradar.app`; **Background Modes** → remote notifications (`Config/Info.plist`).
 
 ---
 
 ## 2. CloudKit Production
 
-Development CloudKit is not what App Store users use. Goal: Production schema is deployed and sharing works there.
-
-- [x] Deploy the schema to **Production**:
+- [x] Deploy CloudKit schema to Production:
   1. Open [CloudKit Console](https://icloud.developer.apple.com/).
   2. Choose **CloudKit Database**.
   3. In the top breadcrumb, set the container to **`iCloud.com.wifyradar.app`** (chevron next to the container name).
-  4. In CloudKit Database, use the deploy control in the **bottom left**. In **Confirm Deployment**, review the listed schema changes, then click **Deploy**.
-- [ ] On two physical devices signed into **different** iCloud accounts, install a Production build via [`testflight.md`](testflight.md) and verify: create list → invite → accept → item sync → remove/leave.
-- [ ] Confirm Production has enough free iCloud storage on both Apple IDs (Quota Exceeded breaks sharing).
-
-Do not submit until Production share flow works.
+  4. Use the deploy control in the **bottom left**. In **Confirm Deployment**, review the listed schema changes, then click **Deploy**.
+- [x] Complete [`docs/testflight.md`](testflight.md): Internal Testing group, add build, install on phones, verify Production sharing.
 
 ---
 
-## 3. App Store Connect — app record
+## 3. Privacy and store questionnaires
 
-- [x] **My Apps** → **+** → New App.
-- [x] Platforms: iOS.
-- [x] Name, primary language, Bundle ID `com.wifyradar.app`.
-- [x] **SKU:** `wifyradar` (internal only; not shown on the App Store).
-- [x] User Access (Full Access for a typical solo team).
-
----
-
-## 4. Privacy and compliance
-
-### Privacy policy (required)
-
-- [ ] Host a public **Privacy Policy** URL (HTTPS).
+- [ ] Host a public **Privacy Policy** URL (HTTPS). Follow [`github-pages.md`](github-pages.md).
 - [ ] Policy covers at least:
-  - List and item content stored in the user’s **iCloud** via **CloudKit** (Apple’s infrastructure; you do not run a separate app server for list data).
-  - Optional **Contacts** access: used only on-device to pick an Apple ID email for invites; address book is not uploaded as a contact database.
-  - Invite email / participant identity as needed for CloudKit sharing.
-  - How to stop sharing / leave a list / delete data (in-app controls + iCloud account controls).
-- [ ] Paste the URL into App Store Connect → App Privacy / App Information (**Privacy Policy URL**).
-
-### App Privacy nutrition label (required)
-
-Answer in App Store Connect for data collected by the app (and any third-party SDK code — this project has none beyond Apple frameworks).
-
-Declare types that actually leave the device for longer than servicing a real-time request. Typical areas to review for wifyradar (confirm against current code before submitting):
-
-- [ ] User content (list names, item text, check state) via CloudKit.
-- [ ] Contact info (email) when used as a share invitee identifier.
-- [ ] Identifiers Apple/CloudKit may associate with the iCloud account for sync and sharing.
-- [ ] Purposes: App Functionality (not tracking / not third-party advertising, unless that changes).
-- [ ] Linked to user / used for tracking: answer honestly for CloudKit account-linked data; do not claim “not linked” if the data is in the user’s iCloud account.
-
-Keep answers updated if behavior changes. Guide: [App privacy details](https://developer.apple.com/app-store/app-privacy-details/).
-
-### Permissions copy
-
-- [x] `NSContactsUsageDescription` in `Config/Info.plist` remains accurate (Contacts only to pick invite email on device).
-
-### Age rating and other ASC questionnaires
-
-- [ ] Complete the **age rating** questionnaire (shared lists / no objectionable content expected for a utility list app — answer for what the app actually contains).
-- [ ] Complete any required **encryption** / export compliance questions for the build (standard HTTPS / Apple frameworks usual path).
-- [ ] Fill **Accessibility** nutrition fields if you choose to publish them (optional but recommended when accurate).
+  - List and item content in the user’s **iCloud** via **CloudKit**.
+  - Optional **Contacts** access: on-device invite email pick only; address book not uploaded.
+  - Invite email / participant identity for CloudKit sharing.
+  - How to stop sharing / leave / delete (in-app + iCloud account controls).
+- [ ] Paste the URL into App Store Connect (**Privacy Policy URL**).
+- [ ] App Privacy nutrition label: user content via CloudKit; invite email; account-linked identifiers; purpose App Functionality; linked-to-user answers that match CloudKit. Guide: [App privacy details](https://developer.apple.com/app-store/app-privacy-details/).
+- [x] `NSContactsUsageDescription` in `Config/Info.plist` remains accurate.
+- [ ] Complete the **age rating** questionnaire.
+- [ ] Fill **Accessibility** nutrition fields if publishing them.
 
 ---
 
-## 5. Product page assets
+## 4. Product page assets
 
-- [ ] Subtitle, description, keywords, support URL, marketing URL (optional).
+- [ ] Subtitle, description, keywords, **Support URL** (from [`github-pages.md`](github-pages.md)), marketing URL (optional).
 - [ ] Category (for example Productivity).
-- [x] **App icon** — already in `Assets.xcassets` / AppIcon; confirm it matches ASC requirements.
-- [ ] **Screenshots** for required iPhone sizes (capture from Simulator or device). Suggested shots: splash or Lists home, list detail with items, Share / Manage Sharing.
+- [x] **App icon** — opaque 1024×1024 in `Assets.xcassets` / AppIcon (no alpha channel).
+- [ ] **Screenshots** for required iPhone sizes. Suggested: Lists home, list detail, Share / Manage Sharing.
 - [ ] App Preview video optional.
 - [ ] “What’s New” text for version 1.0.
 
 ---
 
-## 6. Version and build
+## 5. Submit for review
 
-- [x] Set **Marketing version** and **Build** in Xcode (General) or `agvtool` — e.g. `1.0` / `1`.
-- [x] Archive: Xcode scheme **WifyRadar**, destination **Any iOS Device (arm64)**, Product → **Archive**.
-- [x] Organizer → **Distribute App** → **App Store Connect** → Upload.
-- [ ] Wait until the build finishes processing in App Store Connect.
-
-Before first public submit, use TestFlight ([`testflight.md`](testflight.md)):
-
-- [ ] Enable **TestFlight** for the build (internal group is enough).
-- [ ] Internal testers exercise create / share / accept / sync / leave on Production CloudKit.
-
----
-
-## 7. Submit for review
-
-- [ ] Attach the processed build to the iOS version.
-- [ ] Review notes for Apple: app requires **iCloud** sign-in; sharing needs a second Apple ID; Contacts optional for invite email; no separate demo account (use iCloud).
+- [ ] Attach the build to the iOS version.
+- [ ] Review notes: requires **iCloud**; sharing needs a second Apple ID; Contacts optional for invite email; no separate demo account.
 - [ ] Contact info for App Review.
 - [ ] Submit.
 
-After approval: choose release (manual or automatic). Monitor for Resolution Center messages.
+After approval: choose release (manual or automatic). Monitor Resolution Center.
 
 ---
 
-## 8. Common rejection risks for this app
+## 6. Common rejection risks
 
 | Risk | Mitigation |
 |------|------------|
-| Share / sync fails in review | Production CloudKit verified; notes explain two Apple IDs |
-| Privacy label incomplete | Declare CloudKit user content and invite email use |
+| Share / sync fails in review | [`testflight.md`](testflight.md) verified; review notes explain two Apple IDs |
+| Privacy label incomplete | Declare CloudKit user content and invite email |
 | Missing privacy policy | Public HTTPS policy before submit |
-| Contacts purpose unclear | Keep Info.plist string aligned with policy |
-| Broken launch / blank UI | Smoke-test Release archive on a device |
+| Contacts purpose unclear | Info.plist string aligned with policy |
+| Broken launch / blank UI | Smoke-test a Release install on a device |
 
 ---
 
-## 9. After 1.0
+## 7. After 1.0
 
 - [ ] Bump build (and version when appropriate) for each upload.
-- [ ] Re-test Production CloudKit after schema changes; deploy schema before relying on new fields in the store.
+- [ ] After schema changes: deploy to Production, then re-verify sharing on a TestFlight build.
 - [ ] Update privacy answers and policy if Contacts / sharing / analytics change.
-- [ ] Keep Xcode / SDK current with [App Store submission requirements](https://developer.apple.com/app-store/submitting/) for the season.
+- [ ] Keep Xcode / SDK current with [App Store submission requirements](https://developer.apple.com/app-store/submitting/).

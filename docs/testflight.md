@@ -1,6 +1,6 @@
 # TestFlight (wifyradar)
 
-Install **WifyRadar** on real iPhones through [TestFlight](https://developer.apple.com/testflight/). TestFlight builds use **Production** CloudKit. Xcode ▶ installs use **Development**.
+Install **WifyRadar** on real iPhones through [TestFlight](https://developer.apple.com/testflight/). TestFlight builds use **Production** CloudKit. Xcode ▶ installs use **Development**. Completing this doc checks off the TestFlight item in [`app-store-checklist.md`](app-store-checklist.md) §2.
 
 **Identifiers**
 
@@ -9,8 +9,9 @@ Install **WifyRadar** on real iPhones through [TestFlight](https://developer.app
 | Bundle ID | `com.wifyradar.app` |
 | Scheme | `WifyRadar` |
 | Marketing version / build (starting point) | `1.0` / `1` |
+| SKU | `wifyradar` |
 
-Do the path below **in order**.
+Do the path below **in order**. Deploy the CloudKit Production schema before this path (checklist §2).
 
 ---
 
@@ -64,8 +65,9 @@ cp -R /tmp/WifyRadar.xcarchive "$ARCHIVE_DIR/WifyRadar $(date '+%b %-d, %Y at %-
 2. **Distribute App** → **App Store Connect** → **Upload** (defaults are fine for a first upload).
 3. Wait until **Processing** finishes. Check: [App Store Connect](https://appstoreconnect.apple.com) → **Apps** → **wifyradar** → **TestFlight** (iOS builds, for example **1.0 (1)**). Apple may also email when processing finishes.
 4. If the build then shows **Missing Compliance**, answer the export / encryption questions on that build (required before TestFlight can use it). Then continue with §3.
+5. Confirm build status is **Ready to Submit**.
 
-**Done when:** the build is past Processing (and past Missing Compliance if it appeared).
+**Done when:** the build is **Ready to Submit**.
 
 ---
 
@@ -73,10 +75,15 @@ cp -R /tmp/WifyRadar.xcarchive "$ARCHIVE_DIR/WifyRadar $(date '+%b %-d, %Y at %-
 
 Internal testers are people on the App Store Connect team (Account Holder, Admin, App Manager, Developer, Marketing). No Beta App Review for internal groups.
 
-1. In App Store Connect → the **wifyradar** app → **TestFlight**.
-2. Select the build from §2 (past Processing / Missing Compliance).
-3. Under **Internal Testing**, create or open a group, add the build, and add testers (yourself and any other team members who will install).
-4. Each tester: install **TestFlight** from the App Store on their iPhone, sign in with the Apple ID invited on the team, accept the invite, install **wifyradar**.
+1. Each tester: install **TestFlight** from the App Store on their iPhone.
+2. For **Internal** testers: invite each person under **Users and Access** (top menu bar) with at least a **Developer** or **Marketing** role before adding them to a TestFlight group; otherwise they will not appear as tester options.
+3. In App Store Connect → the **wifyradar** app → **TestFlight**.
+4. Select the build from §2 (**Ready to Submit**).
+5. Create a group before assigning the build. The TestFlight page may show **Internal Testing** and **External Testing** in the left sidebar (**+** on either), or a prompt to create your first group if none exist yet.
+6. Open the group, add the build, then add testers with one of these paths:
+   - **A. Internal:** Add team members from **Users and Access** to the **Internal Testing** group.
+   - **B. External:** Create a public link for the group and share it; testers join themselves and no per-person invite is needed. The build must pass **Beta App Review** before external testers can install.
+7. Each tester: sign in with their Apple ID, accept the invite or open the public link, install **wifyradar**.
 
 **Done when:** both phones that will verify sharing have the TestFlight build installed and launch.
 
@@ -91,7 +98,7 @@ On two physical devices, **different** iCloud accounts, both online, with free i
 3. Add or check an item on each side; confirm sync.
 4. Remove / leave / delete as you care about for release.
 
-**Done when:** that flow works on the TestFlight build. Mark the matching items in [`app-store-checklist.md`](app-store-checklist.md) §2.
+**Done when:** that flow works on the TestFlight build. Check off the TestFlight item in [`app-store-checklist.md`](app-store-checklist.md) §2.
 
 ---
 
