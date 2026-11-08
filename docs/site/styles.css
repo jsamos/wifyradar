@@ -1,0 +1,122 @@
+:root {
+  --brand-light: #fd99bf;
+  --brand-mid: #fc57a4;
+  --brand-primary: #fb2682;
+  --brand-deep: #f90c77;
+  --ink: #1a1216;
+  --muted: #5c4a52;
+  --paper: #fff8fb;
+  --card: rgba(255, 255, 255, 0.78);
+  --line: rgba(249, 12, 119, 0.14);
+  --max: 40rem;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  color-scheme: light;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: "Sora", system-ui, sans-serif;
+  font-size: 1.05rem;
+  line-height: 1.65;
+  color: var(--ink);
+  background:
+    radial-gradient(1200px 600px at 10% -10%, rgba(253, 153, 191, 0.55), transparent 55%),
+    radial-gradient(900px 500px at 100% 0%, rgba(252, 87, 164, 0.28), transparent 50%),
+    linear-gradient(180deg, #fff0f6 0%, var(--paper) 45%, #ffffff 100%);
+}
+
+a {
+  color: var(--brand-deep);
+  text-underline-offset: 0.15em;
+}
+
+a:hover {
+  color: var(--brand-primary);
+}
+
+.wrap {
+  width: min(100% - 2rem, var(--max));
+  margin: 0 auto;
+  padding: 2.5rem 0 4rem;
+}
+
+.brand {
+  display: inline-block;
+  font-weight: 700;
+  font-size: 1.65rem;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  text-decoration: none;
+  background: linear-gradient(135deg, var(--brand-light), var(--brand-mid), var(--brand-deep));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+nav {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin: 1.25rem 0 2rem;
+  font-size: 0.95rem;
+}
+
+nav a[aria-current="page"] {
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--ink);
+}
+
+main {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 1.25rem;
+  padding: 1.5rem 1.4rem 1.75rem;
+  backdrop-filter: blur(10px);
+}
+
+h1 {
+  margin: 0 0 0.75rem;
+  font-size: clamp(1.6rem, 4vw, 2rem);
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+}
+
+h2 {
+  margin: 1.75rem 0 0.5rem;
+  font-size: 1.1rem;
+  letter-spacing: -0.02em;
+}
+
+p,
+ul {
+  margin: 0 0 1rem;
+  color: var(--muted);
+}
+
+ul {
+  padding-left: 1.2rem;
+}
+
+li {
+  margin: 0.35rem 0;
+}
+
+.meta {
+  margin: 0 0 1.25rem;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.contact {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--line);
+}

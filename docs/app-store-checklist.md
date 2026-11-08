@@ -38,13 +38,13 @@ Apple: [Submitting](https://developer.apple.com/app-store/submitting/), [App pri
 
 ## 3. Privacy and store questionnaires
 
-- [ ] Host a public **Privacy Policy** URL (HTTPS). Follow [`github-pages.md`](github-pages.md).
-- [ ] Policy covers at least:
+- [x] Host a public **Privacy Policy** URL (HTTPS). Follow [`github-pages.md`](github-pages.md). Live: https://chipinhead.github.io/wifyradar-site/privacy.html
+- [x] Policy covers at least:
   - List and item content in the user’s **iCloud** via **CloudKit**.
   - Optional **Contacts** access: on-device invite email pick only; address book not uploaded.
   - Invite email / participant identity for CloudKit sharing.
   - How to stop sharing / leave / delete (in-app + iCloud account controls).
-- [ ] Paste the URL into App Store Connect (**Privacy Policy URL**).
+- [x] Paste the URL into App Store Connect (**Privacy Policy URL**).
 - [ ] App Privacy nutrition label: user content via CloudKit; invite email; account-linked identifiers; purpose App Functionality; linked-to-user answers that match CloudKit. Guide: [App privacy details](https://developer.apple.com/app-store/app-privacy-details/).
 - [x] `NSContactsUsageDescription` in `Config/Info.plist` remains accurate.
 - [ ] Complete the **age rating** questionnaire.
@@ -54,7 +54,8 @@ Apple: [Submitting](https://developer.apple.com/app-store/submitting/), [App pri
 
 ## 4. Product page assets
 
-- [ ] Subtitle, description, keywords, **Support URL** (from [`github-pages.md`](github-pages.md)), marketing URL (optional).
+- [ ] Subtitle, description, keywords, marketing URL (optional).
+- [x] **Support URL** (from [`github-pages.md`](github-pages.md)): https://chipinhead.github.io/wifyradar-site/
 - [ ] Category (for example Productivity).
 - [x] **App icon** — opaque 1024×1024 in `Assets.xcassets` / AppIcon (no alpha channel).
 - [ ] **Screenshots** for required iPhone sizes. Suggested: Lists home, list detail, Share / Manage Sharing.
