@@ -1,6 +1,6 @@
 # App Store checklist (wifyradar)
 
-Example runbook to ship **wifyradar** through [App Store Connect](https://appstoreconnect.apple.com). Follow sections **in order**. TestFlight detail: [`testflight.md`](testflight.md). Privacy / Support HTTPS pages: [`github-pages.md`](github-pages.md). App Privacy questionnaire: [`app-privacy.md`](app-privacy.md). Age rating: [`age-rating.md`](age-rating.md). Accessibility: [`accessibility.md`](accessibility.md). Product page text: [`product-page.md`](product-page.md). Local Xcode installs: [`build.md`](build.md). iCloud enrollment: [`icloud-sharing-plan.md`](icloud-sharing-plan.md).
+Example runbook to ship **wifyradar** through [App Store Connect](https://appstoreconnect.apple.com). Follow sections **in order**. TestFlight detail: [`testflight.md`](testflight.md). Privacy / Support HTTPS pages: [`github-pages.md`](github-pages.md). App Privacy questionnaire: [`app-privacy.md`](app-privacy.md). Age rating: [`age-rating.md`](age-rating.md). Accessibility: [`accessibility.md`](accessibility.md). Product page text: [`product-page.md`](product-page.md). Screenshots: [`screenshots.md`](screenshots.md). Local Xcode installs: [`build.md`](build.md). iCloud enrollment: [`icloud-sharing-plan.md`](icloud-sharing-plan.md).
 
 **Identifiers**
 
@@ -58,7 +58,7 @@ Apple: [Submitting](https://developer.apple.com/app-store/submitting/), [App pri
 - [x] **Support URL** (from [`github-pages.md`](github-pages.md)): https://chipinhead.github.io/wifyradar-site/
 - [x] App Information — Subtitle and Category (Primary **Productivity**): [`product-page.md`](product-page.md) §10.
 - [x] **App icon** — opaque 1024×1024 in `Assets.xcassets` / AppIcon (no alpha channel).
-- [ ] **Screenshots** for required iPhone sizes. Suggested: Lists home, list detail, Share / Manage Sharing.
+- [ ] Screenshots: [`screenshots.md`](screenshots.md).
 - [ ] App Preview video optional.
 - [ ] “What’s New” text for version 1.0.
 

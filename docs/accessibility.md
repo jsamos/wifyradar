@@ -6,6 +6,8 @@ Apple: [Overview of Accessibility Nutrition Labels](https://developer.apple.com/
 
 Claim a feature only if a user can complete **all common tasks** of the app with that feature enabled. For wifyradar, common tasks include: open the app to Lists home, create a list, open a list, add or check items, share / invite, manage sharing, leave or delete a list.
 
+wifyradar is **iPhone-only**.
+
 ---
 
 ## 1. Open App Accessibility
@@ -23,15 +25,12 @@ Claim a feature only if a user can complete **all common tasks** of the app with
 | Device | Select |
 |--------|--------|
 | iPhone | **Yes** |
-| iPad | **Yes** (universal app, `TARGETED_DEVICE_FAMILY` includes iPad) |
+| iPad | **No** |
 | Apple Watch | **No** |
 
 **Save**.
 
-**Done when:** the App Accessibility page shows **Drafts (2)** with:
-
-- **iPhone Support Not Yet Indicated** → **Add iPhone Support**
-- **iPad Support Not Yet Indicated** → **Add iPad Support**
+**Done when:** the App Accessibility page shows an iPhone draft card (**Add iPhone Support** or an indicated-support card with **Edit**).
 
 ---
 
@@ -43,39 +42,28 @@ Claim a feature only if a user can complete **all common tasks** of the app with
 
 **Done when:** iPhone draft is set to **No** (not “Support Not Yet Indicated”).
 
----
-
-## 4. Add iPad Support
-
-1. Click **Add iPad Support**.
-2. **Does your app support any of the above features on iPad?** → **No**.
-3. Continue until the iPad card matches the iPhone wording (**Edit** available).
-
-**Done when:** iPad draft is set to **No**.
-
 ### Recorded answers
 
 | Device | Supports any? | Date |
 |--------|---------------|------|
 | iPhone | **No** | 2026-11-08 |
-| iPad | **No** | 2026-11-08 |
 
-Check off the item in [`app-store-checklist.md`](app-store-checklist.md) §3 after both devices are **No**.
+Check off the item in [`app-store-checklist.md`](app-store-checklist.md) §3 after iPhone is **No**.
 
 ---
 
-## 5. Publish later (blocked until App Store release)
+## 4. Publish later (blocked until App Store release)
 
-**Publish stays disabled** until wifyradar has an app version **released on the App Store**. Drafts for iPhone and iPad can be complete (**No**) while the blue banner still says you can only publish for devices with a released version.
+**Publish stays disabled** until wifyradar has an app version **released on the App Store**. The iPhone draft can be complete (**No**) while the blue banner still says you can only publish for devices with a released version.
 
 1. Leave **Accessibility URL** blank unless a dedicated accessibility page exists.
 2. After the first App Store release, return here → **Publish** (enabled when ASC allows).
-3. To claim features later: verify common tasks on device, **Edit** each device, change answers, then **Publish** again.
+3. To claim features later: verify common tasks on device, **Edit** iPhone, change answers, then **Publish** again.
 
-**Done when:** understood that drafts are enough for the checklist now; **Publish** waits on App Store release.
+**Done when:** understood that the iPhone draft is enough for the checklist now; **Publish** waits on App Store release.
 
 ---
 
-## 6. Later changes
+## 5. Later changes
 
-Re-test common tasks after UI changes, update App Accessibility, and refresh the recorded-answers table in §4.
+Re-test common tasks after UI changes, update App Accessibility, and refresh the recorded-answers table in §3.
