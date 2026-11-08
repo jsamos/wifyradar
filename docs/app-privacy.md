@@ -85,19 +85,10 @@ App Store Connect shows **Additional Setup Required**: “To update your app's p
 5. Tracking examples screen → **Next**.
 6. Used for tracking → **No** → finish until the yellow warning on User ID is gone.
 
-**Done when:** User ID no longer shows **Set Up User ID**, and no yellow warnings remain under **Data Types**.
+**Done when:** User ID no longer shows **Set Up User ID**, and no yellow warnings remain under **Data Types**. Check off the item in [`app-store-checklist.md`](app-store-checklist.md) §3.
 
 ---
 
-## 7. Publish
-
-1. Confirm the product-page preview lists Email Address, Other User Content, and User ID (not **Data Not Collected**).
-2. Click **Publish** if shown. That updates the nutrition label; it is not App Review submission.
-
-**Done when:** App Privacy is published with those three types. Check off the item in [`app-store-checklist.md`](app-store-checklist.md) §3.
-
----
-
-## 8. Later changes
+## 7. Later changes
 
 When Contacts, sharing, analytics, or CloudKit practices change, update this questionnaire and [`docs/site/privacy.html`](site/privacy.html), then republish App Privacy.
