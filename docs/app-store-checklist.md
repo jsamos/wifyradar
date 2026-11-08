@@ -1,6 +1,6 @@
 # App Store checklist (wifyradar)
 
-Example runbook to ship **wifyradar** through [App Store Connect](https://appstoreconnect.apple.com). Follow sections **in order**. TestFlight detail: [`testflight.md`](testflight.md). Privacy / Support HTTPS pages: [`github-pages.md`](github-pages.md). App Privacy questionnaire: [`app-privacy.md`](app-privacy.md). Age rating: [`age-rating.md`](age-rating.md). Local Xcode installs: [`build.md`](build.md). iCloud enrollment: [`icloud-sharing-plan.md`](icloud-sharing-plan.md).
+Example runbook to ship **wifyradar** through [App Store Connect](https://appstoreconnect.apple.com). Follow sections **in order**. TestFlight detail: [`testflight.md`](testflight.md). Privacy / Support HTTPS pages: [`github-pages.md`](github-pages.md). App Privacy questionnaire: [`app-privacy.md`](app-privacy.md). Age rating: [`age-rating.md`](age-rating.md). Accessibility: [`accessibility.md`](accessibility.md). Local Xcode installs: [`build.md`](build.md). iCloud enrollment: [`icloud-sharing-plan.md`](icloud-sharing-plan.md).
 
 **Identifiers**
 
@@ -48,7 +48,7 @@ Apple: [Submitting](https://developer.apple.com/app-store/submitting/), [App pri
 - [x] App Privacy questionnaire: [`app-privacy.md`](app-privacy.md).
 - [x] `NSContactsUsageDescription` in `Config/Info.plist` remains accurate.
 - [x] Age rating questionnaire: [`age-rating.md`](age-rating.md).
-- [ ] Fill **Accessibility** nutrition fields if publishing them.
+- [x] Accessibility Nutrition Labels: [`accessibility.md`](accessibility.md).
 
 ---
 
