@@ -1,6 +1,6 @@
 # App Store checklist (wifyradar)
 
-Example runbook to ship **wifyradar** through [App Store Connect](https://appstoreconnect.apple.com). Follow sections **in order**. TestFlight detail: [`testflight.md`](testflight.md). Privacy / Support HTTPS pages: [`github-pages.md`](github-pages.md). Local Xcode installs: [`build.md`](build.md). iCloud enrollment: [`icloud-sharing-plan.md`](icloud-sharing-plan.md).
+Example runbook to ship **wifyradar** through [App Store Connect](https://appstoreconnect.apple.com). Follow sections **in order**. TestFlight detail: [`testflight.md`](testflight.md). Privacy / Support HTTPS pages: [`github-pages.md`](github-pages.md). App Privacy questionnaire: [`app-privacy.md`](app-privacy.md). Local Xcode installs: [`build.md`](build.md). iCloud enrollment: [`icloud-sharing-plan.md`](icloud-sharing-plan.md).
 
 **Identifiers**
 
@@ -45,7 +45,7 @@ Apple: [Submitting](https://developer.apple.com/app-store/submitting/), [App pri
   - Invite email / participant identity for CloudKit sharing.
   - How to stop sharing / leave / delete (in-app + iCloud account controls).
 - [x] Paste the URL into App Store Connect (**Privacy Policy URL**).
-- [ ] App Privacy nutrition label: user content via CloudKit; invite email; account-linked identifiers; purpose App Functionality; linked-to-user answers that match CloudKit. Guide: [App privacy details](https://developer.apple.com/app-store/app-privacy-details/).
+- [ ] App Privacy questionnaire: [`app-privacy.md`](app-privacy.md).
 - [x] `NSContactsUsageDescription` in `Config/Info.plist` remains accurate.
 - [ ] Complete the **age rating** questionnaire.
 - [ ] Fill **Accessibility** nutrition fields if publishing them.

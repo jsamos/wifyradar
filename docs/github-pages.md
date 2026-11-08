@@ -67,9 +67,9 @@ If the site 404s, confirm the repo is **Public**, the branch and `/ (root)` sour
 2. **App Privacy** / privacy policy field (checklist §3): paste  
    https://chipinhead.github.io/wifyradar-site/privacy.html  
    If App Store Connect shows **Publish**, click it. That publishes App Privacy / the policy URL on the product page; it is not submitting the app for App Review.
-3. Open **Distribution** → **iOS App** → **1.0 Prepare for Submission** (same page as Header / screenshots). Scroll past Header assets to the text fields. In **Support URL**, paste  
+3. Open **Distribution** → **iOS App** → **1.0 Prepare for Submission**. Scroll to **Support URL** and paste  
    https://chipinhead.github.io/wifyradar-site/  
-   then click **Save**. For this doc, only **Support URL** is required. Leave Description, Keywords, screenshots, and the rest empty for now; fill them later under [`app-store-checklist.md`](app-store-checklist.md) §4 before **Add for Review**.
+   then **Save**. Other product-page fields (description, keywords, screenshots) are covered in [`app-store-checklist.md`](app-store-checklist.md) §4.
 4. Optional **Marketing URL:** same as Support, or omit.
 
 **Done when:** both URLs open in a browser while signed out of GitHub, Privacy Policy is set in App Privacy, and **Support URL** is saved on the version page.
