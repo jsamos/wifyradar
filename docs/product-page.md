@@ -11,6 +11,7 @@ Completing this doc checks off the subtitle / description / keywords item in [`a
 | Support URL | same (already set; confirm) |
 | Copyright | same |
 | Subtitle | **App Information** |
+| Category (Primary) | **App Information** |
 
 ### Optional on this path
 
@@ -140,7 +141,7 @@ Adjust the rights-holder name if needed.
 
 ---
 
-## 10. Subtitle
+## 10. App Information — Subtitle and Category
 
 1. Left sidebar → **General** → **App Information**.
 2. **Subtitle:**
@@ -151,9 +152,10 @@ Shared lists that stay in sync
 
 (30 characters)
 
-3. **Save**.
+3. **Category** → Primary: **Productivity**. Secondary: optional.
+4. **Save**.
 
-**Done when:** Subtitle is saved. Check off the item in [`app-store-checklist.md`](app-store-checklist.md) §4.
+**Done when:** Subtitle and Primary Category are saved. Check off the matching items in [`app-store-checklist.md`](app-store-checklist.md) §4.
 
 ---
 

@@ -54,9 +54,9 @@ Apple: [Submitting](https://developer.apple.com/app-store/submitting/), [App pri
 
 ## 4. Product page assets
 
-- [x] Product page text (Description, Keywords, Support URL, Marketing URL, Version, Copyright, Subtitle): [`product-page.md`](product-page.md).
+- [x] Version page text (Description, Keywords, Support URL, Marketing URL, Version, Copyright): [`product-page.md`](product-page.md) §§1–9.
 - [x] **Support URL** (from [`github-pages.md`](github-pages.md)): https://chipinhead.github.io/wifyradar-site/
-- [ ] Category (for example Productivity).
+- [x] App Information — Subtitle and Category (Primary **Productivity**): [`product-page.md`](product-page.md) §10.
 - [x] **App icon** — opaque 1024×1024 in `Assets.xcassets` / AppIcon (no alpha channel).
 - [ ] **Screenshots** for required iPhone sizes. Suggested: Lists home, list detail, Share / Manage Sharing.
 - [ ] App Preview video optional.
