@@ -58,7 +58,7 @@ Apple: [Submitting](https://developer.apple.com/app-store/submitting/), [App pri
 - [x] **Support URL** (from [`github-pages.md`](github-pages.md)): https://chipinhead.github.io/wifyradar-site/
 - [x] App Information — Subtitle and Category (Primary **Productivity**): [`product-page.md`](product-page.md) §10.
 - [x] **App icon** — opaque 1024×1024 in `Assets.xcassets` / AppIcon (no alpha channel).
-- [ ] Screenshots: [`screenshots.md`](screenshots.md).
+- [x] Screenshots: [`screenshots.md`](screenshots.md).
 - [ ] App Preview video optional.
 - [ ] “What’s New” text for version 1.0.
 

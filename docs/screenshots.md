@@ -4,19 +4,20 @@ Upload screenshots for the App Store product page. Completing this doc checks of
 
 Apple: [Screenshot specifications](https://developer.apple.com/help/app-store-connect/reference/app-information/screenshot-specifications/).
 
-App Preview video is a separate checklist item (optional). wifyradar is **iPhone-only**.
+App Preview video is a separate checklist item (optional). The binary supports **iPhone and iPad**, so both required wells need screenshots. iPhone Duo screenshots are not required for 1.0.
 
 ---
 
-## Required display size
+## Required display sizes
 
-| Slot in App Store Connect | Accepted portrait sizes (px) |
-|---------------------------|------------------------------|
-| **iPhone with Dynamic Island (medium display)** | **1206 × 2622** or **1179 × 2556** |
+| Slot in App Store Connect | Accepted portrait sizes (px) | Simulator to use |
+|---------------------------|------------------------------|------------------|
+| **iPhone with Dynamic Island (medium display)** | **1206 × 2622** or **1179 × 2556** | **iPhone 17 Pro** |
+| **iPad 13″ display** | **2064 × 2752** or **2048 × 2732** | **iPad Pro 13-inch (M5)** |
 
-PNG or JPEG, no transparency. Up to 10 screenshots. More than half must show the app in use.
+PNG or JPEG, **no transparency** (Simulator PNGs usually need the strip-alpha step in §3). Up to 10 screenshots per slot. More than half must show the app in use.
 
-Other iPhone sizes can be left empty when App Store Connect scales from this set.
+Other iPhone / iPad sizes can be left empty when App Store Connect scales from these sets.
 
 ---
 
@@ -27,37 +28,126 @@ Other iPhone sizes can be left empty when App Store Connect scales from this set
 3. **English (U.S.)**.
 4. Product Page Information → tab **App Previews and Screenshots**.
 
-**Done when:** the iPhone screenshot wells are visible.
+**Done when:** the iPhone medium and iPad 13″ screenshot wells are visible.
 
 ---
 
-## 2. Capture shots (Simulator)
+## 2. Prepare Simulators
 
-Suggested scenes:
+Use an **iOS 26.2** Simulator runtime so **iPhone 17 Pro** and **iPad Pro 13-inch (M5)** are available.
+
+### Install a phone / iPad runtime
+
+**Xcode UI**
+
+1. **Xcode → Settings → Platforms** (or **Components**).
+2. Download **iOS 26.2** Simulator (or another listed iOS runtime that offers iPhone 17 Pro and iPad Pro 13-inch).
+
+**CLI**
+
+```bash
+xcodebuild -downloadPlatform iOS -buildVersion 26.2 -architectureVariant arm64
+xcrun simctl runtime list
+```
+
+**Done when:** `simctl runtime list` shows **iOS 26.2** (Ready).
+
+### Create or confirm devices
+
+**Xcode UI**
+
+1. **Window → Devices and Simulators → Simulators**.
+2. **+** if needed. Create:
+   - **iPhone 17 Pro**, OS **iOS 26.2**
+   - **iPad Pro 13-inch (M5)**, OS **iOS 26.2**
+
+**CLI** (skip if the names already appear under iOS 26.2)
+
+```bash
+RUNTIME=com.apple.CoreSimulator.SimRuntime.iOS-26-2
+xcrun simctl create 'iPhone 17 Pro' com.apple.CoreSimulator.SimDeviceType.iPhone-17-Pro "$RUNTIME"
+xcrun simctl create 'iPad Pro 13-inch (M5)' com.apple.CoreSimulator.SimDeviceType.iPad-Pro-13-inch-M5-12GB "$RUNTIME"
+xcrun simctl list devices available
+```
+
+**Done when:** `simctl list devices available` lists **iPhone 17 Pro** and **iPad Pro 13-inch (M5)** under **iOS 26.2**.
+
+---
+
+## 3. Capture shots (Simulator)
+
+Suggested scenes (capture each on **both** devices):
 
 1. **Lists home** — one or more lists visible.
 2. **List detail** — items with at least one checked.
-3. **Share / Manage Sharing** — invite or people-with-access UI.
+3. **Share** — invite sheet (Manage Sharing with a second account is optional).
 
-1. Xcode → scheme **WifyRadar** → destination an iPhone that matches medium Dynamic Island sizes (for example **iPhone 16 Pro** or **iPhone 17** / Pro as listed in Apple’s table).
-2. Run the app, set up demo data, open each scene.
-3. **Device** → **Trigger Screenshot** (or `Cmd+S` in Simulator).
-4. Confirm pixel size is **1206 × 2622** or **1179 × 2556** (Preview → Tools → Show Inspector, or `sips -g pixelWidth -g pixelHeight`).
+### Start the app on iPhone 17 Pro
 
-**Done when:** at least one valid iPhone medium screenshot exists on disk (three recommended).
+At the top of the Xcode window, find the **▶** (play) button. Just to its right you will see text like:
+
+`WifyRadar  >  iPhone 17 Pro`
+
+That second name is a button (the run destination). If it names a different device, click it and change it.
+
+1. Double-click **`WifyRadar.xcodeproj`** in Finder if Xcode is not already open on this project.
+2. Click the second name after `WifyRadar  >`.
+3. In the dropdown, under **iOS Simulators**, choose **iPhone 17 Pro** (iOS 26.2).
+4. Click **▶**.
+5. Wait until the **Simulator** window appears (a fake phone on the Mac). The first boot can take a minute.
+6. Wait until **wifyradar** opens on Lists home.
+7. If Simulator asks you to sign in to **iCloud** / Apple ID, complete that (needed for Share scenes).
+8. Create one or two sample lists and a few items (check at least one) so the three scenes look real.
+9. For each suggested scene: open that screen, click the Simulator window so it is frontmost, then **File → Save Screen** (or **Cmd+S**).
+
+### Start the app on iPad Pro 13-inch (M5)
+
+1. In Xcode, click the destination name after `WifyRadar  >` again.
+2. Under **iOS Simulators**, choose **iPad Pro 13-inch (M5)** (iOS 26.2).
+3. Click **▶**.
+4. Wait for the iPad Simulator window and for **wifyradar** to launch.
+5. Set up the same kind of demo data if this Simulator is empty.
+6. Capture the same three scenes with **File → Save Screen** (or **Cmd+S**).
+
+Screenshots save to the Mac **Desktop** by default (Simulator → **Settings → Screen Shots** to change the folder).
+
+### Strip alpha (required)
+
+Simulator PNGs often include an alpha channel even when every pixel is opaque. App Store Connect rejects images with transparency.
+
+For each screenshot PNG, round-trip through JPEG to drop alpha, then check:
+
+```bash
+FILE=~/Desktop/YourScreenshot.png
+sips -s format jpeg "$FILE" --out /tmp/asc-shot.jpg
+sips -s format png /tmp/asc-shot.jpg --out "$FILE"
+rm /tmp/asc-shot.jpg
+sips -g pixelWidth -g pixelHeight -g hasAlpha "$FILE"
+```
+
+**Done when:** `hasAlpha: no` and sizes match the table below.
+
+| Device | Expected size |
+|--------|----------------|
+| iPhone 17 Pro | **1206 × 2622** |
+| iPad Pro 13-inch (M5) | **2064 × 2752** |
+
+**Done when:** at least one valid, no-alpha screenshot exists for each required slot (three scenes × two devices recommended).
 
 ---
 
-## 3. Upload
+## 4. Upload
 
 1. On **App Previews and Screenshots**, open the **iPhone with Dynamic Island (medium display)** well.
 2. Drag in the iPhone PNGs (order: Lists home → list detail → sharing).
-3. **Save**.
+3. Open the **iPad 13″ display** well.
+4. Drag in the iPad PNGs (same order).
+5. **Save**.
 
-**Done when:** the required iPhone well has at least one screenshot. Check off the item in [`app-store-checklist.md`](app-store-checklist.md) §4.
+**Done when:** both required wells have at least one screenshot. Check off the item in [`app-store-checklist.md`](app-store-checklist.md) §4.
 
 ---
 
-## 4. Later changes
+## 5. Later changes
 
 Replace screenshots when UI changes materially. Update this file if Apple’s required slots or sizes change.
