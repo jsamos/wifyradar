@@ -59,8 +59,8 @@ Apple: [Submitting](https://developer.apple.com/app-store/submitting/), [App pri
 - [x] App Information — Subtitle and Category (Primary **Productivity**): [`product-page.md`](product-page.md) §10.
 - [x] **App icon** — opaque 1024×1024 in `Assets.xcassets` / AppIcon (no alpha channel).
 - [x] Screenshots: [`screenshots.md`](screenshots.md).
-- [ ] App Preview video optional.
-- [ ] “What’s New” text for version 1.0.
+- [x] App Preview video — skipped for 1.0.
+- [x] “What’s New” — not available on the first version (required for updates only).
 
 ---
 

@@ -30,7 +30,12 @@ Completing this doc checks off the subtitle / description / keywords item in [`a
 | Build | §5 |
 | App Review Information (contact, notes, sign-in) | §5 |
 | App Store Version Release | §5 / submit |
-| What’s New | §4 |
+
+### Not on the first version
+
+| Field | Notes |
+|-------|--------|
+| What’s New in This Version | App Store Connect hides this for the initial 1.0 submit. It appears and is required on later version updates only. |
 
 ### Not used for wifyradar
 
