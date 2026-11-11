@@ -27,9 +27,8 @@ Completing this doc checks off the subtitle / description / keywords item in [`a
 | Field | Checklist |
 |-------|-----------|
 | App Previews and Screenshots | §4 Screenshots |
-| Build | §5 |
-| App Review Information (contact, notes, sign-in) | §5 |
-| App Store Version Release | §5 / submit |
+| Pricing | [`pricing.md`](pricing.md) / checklist §5 |
+| Build / App Review / Submit | [`submit.md`](submit.md) / checklist §6 |
 
 ### Not on the first version
 
@@ -77,7 +76,7 @@ Create a list, add items, and check them off. Invite someone with their Apple ID
 
 Sharing stays private to the people you invite. Contacts access is optional and only helps pick an email on your device; your address book is not uploaded.
 
-Requires an iPhone signed into iCloud. Free to use; list content lives in your iCloud account via CloudKit.
+Requires an iPhone signed into iCloud. List content lives in your iCloud account via CloudKit.
 ```
 
 **Done when:** Description is filled.
@@ -146,9 +145,9 @@ Adjust the rights-holder name if needed.
 
 ---
 
-## 10. App Information — Subtitle and Category
+## 10. App Information — Subtitle, Category, Content Rights
 
-1. Left sidebar → **General** → **App Information**.
+1. Left sidebar → **App Information** (under General / Distribution, depending on the Connect layout).
 2. **Subtitle:**
 
 ```
@@ -158,9 +157,11 @@ Shared lists that stay in sync
 (30 characters)
 
 3. **Category** → Primary: **Productivity**. Secondary: optional.
-4. **Save**.
+4. **Content Rights** → **Set Up Content Rights Information** (on this same App Information page).
+5. Choose **No, it does not contain, show, or access third-party content** (lists are user-created; the app does not ship licensed third-party media).
+6. **Done** / **Save**.
 
-**Done when:** Subtitle and Primary Category are saved. Check off the matching items in [`app-store-checklist.md`](app-store-checklist.md) §4.
+**Done when:** Subtitle, Primary Category, and Content Rights are saved. Check off the matching items in [`app-store-checklist.md`](app-store-checklist.md) §4.
 
 ---
 

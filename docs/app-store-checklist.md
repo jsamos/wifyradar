@@ -1,6 +1,6 @@
 # App Store checklist (wifyradar)
 
-Example runbook to ship **wifyradar** through [App Store Connect](https://appstoreconnect.apple.com). Follow sections **in order**. TestFlight detail: [`testflight.md`](testflight.md). Privacy / Support HTTPS pages: [`github-pages.md`](github-pages.md). App Privacy questionnaire: [`app-privacy.md`](app-privacy.md). Age rating: [`age-rating.md`](age-rating.md). Accessibility: [`accessibility.md`](accessibility.md). Product page text: [`product-page.md`](product-page.md). Screenshots: [`screenshots.md`](screenshots.md). Local Xcode installs: [`build.md`](build.md). iCloud enrollment: [`icloud-sharing-plan.md`](icloud-sharing-plan.md).
+Example runbook to ship **wifyradar** through [App Store Connect](https://appstoreconnect.apple.com). Follow sections **in order**. TestFlight detail: [`testflight.md`](testflight.md). Privacy / Support HTTPS pages: [`github-pages.md`](github-pages.md). App Privacy questionnaire: [`app-privacy.md`](app-privacy.md). Age rating: [`age-rating.md`](age-rating.md). Accessibility: [`accessibility.md`](accessibility.md). Product page text: [`product-page.md`](product-page.md). Screenshots: [`screenshots.md`](screenshots.md). Pricing: [`pricing.md`](pricing.md). Submit for review: [`submit.md`](submit.md). Local Xcode installs: [`build.md`](build.md). iCloud enrollment: [`icloud-sharing-plan.md`](icloud-sharing-plan.md).
 
 **Identifiers**
 
@@ -57,6 +57,7 @@ Apple: [Submitting](https://developer.apple.com/app-store/submitting/), [App pri
 - [x] Version page text (Description, Keywords, Support URL, Marketing URL, Version, Copyright): [`product-page.md`](product-page.md) §§1–9.
 - [x] **Support URL** (from [`github-pages.md`](github-pages.md)): https://chipinhead.github.io/wifyradar-site/
 - [x] App Information — Subtitle and Category (Primary **Productivity**): [`product-page.md`](product-page.md) §10.
+- [x] App Information — Content Rights ([`product-page.md`](product-page.md) §10).
 - [x] **App icon** — opaque 1024×1024 in `Assets.xcassets` / AppIcon (no alpha channel).
 - [x] Screenshots: [`screenshots.md`](screenshots.md).
 - [x] App Preview video — skipped for 1.0.
@@ -64,18 +65,26 @@ Apple: [Submitting](https://developer.apple.com/app-store/submitting/), [App pri
 
 ---
 
-## 5. Submit for review
+## 5. Pricing
 
-- [ ] Attach the build to the iOS version.
-- [ ] Review notes: requires **iCloud**; sharing needs a second Apple ID; Contacts optional for invite email; no separate demo account.
-- [ ] Contact info for App Review.
-- [ ] Submit.
-
-After approval: choose release (manual or automatic). Monitor Resolution Center.
+- [x] Set price (Free for 1.0, or a paid tier): [`pricing.md`](pricing.md).
 
 ---
 
-## 6. Common rejection risks
+## 6. Submit for review
+
+Follow [`submit.md`](submit.md) in order:
+
+- [ ] Attach the TestFlight-processed build to **1.0** ([`submit.md`](submit.md) §1).
+- [ ] App Review contact + notes ([`submit.md`](submit.md) §2).
+- [ ] Version release option ([`submit.md`](submit.md) §3).
+- [ ] Submit for Review ([`submit.md`](submit.md) §4).
+
+After approval: release if you chose manual. Monitor Resolution Center.
+
+---
+
+## 7. Common rejection risks
 
 | Risk | Mitigation |
 |------|------------|
@@ -87,7 +96,7 @@ After approval: choose release (manual or automatic). Monitor Resolution Center.
 
 ---
 
-## 7. After 1.0
+## 8. After 1.0
 
 - [ ] Bump build (and version when appropriate) for each upload.
 - [ ] After schema changes: deploy to Production, then re-verify sharing on a TestFlight build.
